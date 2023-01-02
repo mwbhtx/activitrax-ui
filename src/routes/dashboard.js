@@ -5,9 +5,10 @@ import AppHeader from "../components/AppHeader";
 import SpotifyLogo from '../images/spotify-2.svg';
 import StravaLogo from '../images/strava-2.svg';
 
-import { useGetStravaAuthToken } from "../services/strava";
+import { strava_scopes, useGetStravaAuthToken } from "../services/strava";
 import { useNavigate } from "react-router";
 import { getUserConfig } from "../services/auth0";
+import { spotify_scopes } from "../services/spotify";
 
 export default function Dashboard(props) {
 
@@ -101,8 +102,8 @@ const StravaConnect = () => {
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
     stravaAuthUrl.searchParams.append("client_id", '75032');
     stravaAuthUrl.searchParams.append("response_type", "code");
-    stravaAuthUrl.searchParams.append("approval_prompt", "auto");
-    stravaAuthUrl.searchParams.append("scope", "read_all,profile:read_all,profile:write,activity:read_all,activity:write");
+    stravaAuthUrl.searchParams.append("approval_prompt", "force");
+    stravaAuthUrl.searchParams.append("scope", strava_scopes);
     stravaAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_ACTIVITRAX_STRAVA_REDIRECT_URI);
 
     return (
@@ -128,7 +129,7 @@ const SpotifyConnect = () => {
     spotifyAuthUrl.searchParams.append("client_id", '2d496310f6db494791df2b41b9c2342d');
     spotifyAuthUrl.searchParams.append("response_type", "code");
     spotifyAuthUrl.searchParams.append("show_dialog", "true");
-    spotifyAuthUrl.searchParams.append("scope", 'user-read-recently-played,user-read-email,user-read-private');
+    spotifyAuthUrl.searchParams.append("scope", spotify_scopes);
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_ACTIVITRAX_SPOTIFY_REDIRECT_URI);
 
     return (

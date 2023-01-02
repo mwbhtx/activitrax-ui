@@ -18,3 +18,4 @@ export const exchangeStravaAuthToken = async (api_token, auth_token) => {
     return response.data
 }
  
+export const strava_scopes = "read,read_all,profile:read_all,profile:write,activity:read_all,activity:write"
