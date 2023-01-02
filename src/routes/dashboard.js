@@ -40,8 +40,6 @@ const ServiceConnectDialogue = () => {
                 const accessToken = await getAccessTokenSilently();
                 setAccessToken(accessToken);
 
-                console.log(accessToken)
-
                 // get user config
                 const userConfig = await getUserConfig(accessToken);
 
