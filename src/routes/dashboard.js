@@ -98,11 +98,11 @@ const ServiceConnectDialogue = () => {
 
 const StravaConnect = () => {
 
-    const stravaAuthUrl = new URL(process.env.REACT_APP_ACTIVITRAX_STRAVA_OAUTH_URL);
-    stravaAuthUrl.searchParams.append("client_id", process.env.REACT_APP_ACTIVITRAX_STRAVA_CLIENT_ID);
+    const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
+    stravaAuthUrl.searchParams.append("client_id", '75032');
     stravaAuthUrl.searchParams.append("response_type", "code");
     stravaAuthUrl.searchParams.append("approval_prompt", "auto");
-    stravaAuthUrl.searchParams.append("scope", process.env.REACT_APP_ACTIVITRAX_STRAVA_SCOPES);
+    stravaAuthUrl.searchParams.append("scope", "read_all,profile:read_all,profile:write,activity:read_all,activity:write");
     stravaAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_ACTIVITRAX_STRAVA_REDIRECT_URI);
 
     return (
@@ -124,10 +124,10 @@ const StravaConnect = () => {
 
 const SpotifyConnect = () => {
 
-    const spotifyAuthUrl = new URL(process.env.REACT_APP_ACTIVITRAX_SPOTIFY_OAUTH_URL);
-    spotifyAuthUrl.searchParams.append("client_id", process.env.REACT_APP_ACTIVITRAX_SPOTIFY_CLIENT_ID);
+    const spotifyAuthUrl = new URL('https://accounts.spotify.com/authorize');
+    spotifyAuthUrl.searchParams.append("client_id", '2d496310f6db494791df2b41b9c2342d');
     spotifyAuthUrl.searchParams.append("response_type", "code");
-    spotifyAuthUrl.searchParams.append("scope", process.env.REACT_APP_ACTIVITRAX_SPOTIFY_SCOPES);
+    spotifyAuthUrl.searchParams.append("scope", 'user-read-playback-state,user-read-currently-playing,streaming,user-read-playback-position,user-top-read,user-read-recently-played,user-library-read,user-read-private');
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_ACTIVITRAX_SPOTIFY_REDIRECT_URI);
 
     return (
