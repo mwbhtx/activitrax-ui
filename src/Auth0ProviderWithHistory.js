@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 export const Auth0ProviderWithHistory = ({ children }) => {
     const navigate = useNavigate();
 
-    const domain = process.env.REACT_APP_ACTIVITRAX_AUTH0_DOMAIN;
-    const clientId = process.env.REACT_APP_ACTIVITRAX_AUTH0_CLIENT_ID;
+    const domain = "dev-lpah3aos.us.auth0.com";
+    const clientId = "zrhyfRX66bIQ1qXJkBQiJUsbpkBbJtv2";
     const redirectUri = process.env.REACT_APP_ACTIVITRAX_AUTH0_REDIRECT_URI;
     const audience = process.env.REACT_APP_ACTIVITRAX_AUTH0_AUDIENCE;
 
