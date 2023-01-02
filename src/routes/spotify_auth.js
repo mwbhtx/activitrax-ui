@@ -19,17 +19,20 @@ export const SpotifyAuthPage = () => {
     const scope = searchParams.get('scope');
     const error = searchParams.get('error');
 
+    console.log(`scope: ${scope}`)
+    
     useEffect(() => {
 
         const exchangeAuthToken = async (auth_code) => {
 
-            if (error) {
+            if (!auth_code || error) {
                 navigate('/dashboard');
+                return
             }
             
             try {
                 const api_token = await getAccessTokenSilently();
-                const spotifyData = await exchangeSpotifyAuthToken(api_token, auth_code);
+                await exchangeSpotifyAuthToken(api_token, auth_code);
             }
             catch (e) {
                 console.log(`spotify auth error: ${e}`)

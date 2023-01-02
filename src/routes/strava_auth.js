@@ -23,13 +23,21 @@ export const StravaAuthPage = () => {
 
         const exchangeAuthToken = async (auth_code) => {
 
-            if (error) {
+            if (!auth_code || error) {
                 navigate('/dashboard');
+                return
             }
-            
-            const api_token = await getAccessTokenSilently();
-            const stravaData = await exchangeStravaAuthToken(api_token, auth_code);
+
+            try {
+                const api_token = await getAccessTokenSilently();
+                await exchangeStravaAuthToken(api_token, auth_code);
+            }
+            catch (e) {
+                console.log(`strava auth error: ${e}`)
+            }
+
             navigate('/dashboard');
+
         }
 
         exchangeAuthToken(auth_code);
@@ -39,7 +47,7 @@ export const StravaAuthPage = () => {
     return (
         <div className="page-layout">
             <AppHeader />
-            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress color="secondary" sx={{ margin: 20 }} />
             </Box>
         </div >
