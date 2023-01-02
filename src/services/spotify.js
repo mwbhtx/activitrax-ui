@@ -18,3 +18,5 @@ export const exchangeSpotifyAuthToken = async (api_token, auth_token) => {
     const response = await axios(reqConfig);
     return response.data
 }
+
+export const spotify_scopes = 'user-read-recently-played user-read-email user-read-private'

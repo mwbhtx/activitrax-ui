@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import { exchangeSpotifyAuthToken } from "../services/spotify";
 
@@ -19,25 +19,30 @@ export const SpotifyAuthPage = () => {
     const scope = searchParams.get('scope');
     const error = searchParams.get('error');
 
-    console.log(`scope: ${scope}`)
-    
     useEffect(() => {
 
         const exchangeAuthToken = async (auth_code) => {
 
-            if (!auth_code || error) {
-                navigate('/dashboard');
-                return
-            }
-            
             try {
+
+                if (error) {
+                    if (error === 'access_denied') {
+                        throw new Error(`user denied access to spotify`)
+                    }
+                }
+
+                if (!auth_code) {
+                    throw new Error(`no auth code returned from spotify`)
+                }
+
+                // exchange auth code for access token and register spotify account with user
                 const api_token = await getAccessTokenSilently();
                 await exchangeSpotifyAuthToken(api_token, auth_code);
             }
             catch (e) {
-                console.log(`spotify auth error: ${e}`)
+                console.log(e)
             }
-            
+
             navigate('/dashboard');
         }
 
@@ -48,7 +53,7 @@ export const SpotifyAuthPage = () => {
     return (
         <div className="page-layout">
             <AppHeader />
-            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress color="secondary" sx={{ margin: 20 }} />
             </Box>
         </div >
