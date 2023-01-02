@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/activitrax-ui/static/css/main.68b19f66.css",
+    "main.js": "/activitrax-ui/static/js/main.0fbfb2b6.js",
+    "static/media/pexels-rosemary-ketchum-1564466.jpg": "/activitrax-ui/static/media/pexels-rosemary-ketchum-1564466.4cbeb68a006a2cf390bf.jpg",
+    "static/media/activitrax-logo.svg": "/activitrax-ui/static/media/activitrax-logo.e96f3516af8b99ffb682b8f09c01f4bc.svg",
+    "index.html": "/activitrax-ui/index.html",
+    "static/media/spotify-2.svg": "/activitrax-ui/static/media/spotify-2.bc1a3e4cce4eff3ae498bb3540e8da44.svg",
+    "static/media/strava-2.svg": "/activitrax-ui/static/media/strava-2.4b9e035a308139b25f48f3f4c0fe1056.svg",
+    "main.68b19f66.css.map": "/activitrax-ui/static/css/main.68b19f66.css.map",
+    "main.0fbfb2b6.js.map": "/activitrax-ui/static/js/main.0fbfb2b6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.68b19f66.css",
+    "static/js/main.0fbfb2b6.js"
+  ]
+}
