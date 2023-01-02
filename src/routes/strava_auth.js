@@ -26,6 +26,7 @@ export const StravaAuthPage = () => {
             if (error) {
                 navigate('/dashboard');
             }
+            
             const api_token = await getAccessTokenSilently();
             const stravaData = await exchangeStravaAuthToken(api_token, auth_code);
             navigate('/dashboard');

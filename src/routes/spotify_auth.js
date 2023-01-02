@@ -17,10 +17,16 @@ export const SpotifyAuthPage = () => {
     const auth_code = searchParams.get('code');
     const state = searchParams.get('state');
     const scope = searchParams.get('scope');
+    const error = searchParams.get('error');
 
     useEffect(() => {
-        
+
         const exchangeAuthToken = async (auth_code) => {
+
+            if (error) {
+                navigate('/dashboard');
+            }
+            
             try {
                 const api_token = await getAccessTokenSilently();
                 const spotifyData = await exchangeSpotifyAuthToken(api_token, auth_code);
