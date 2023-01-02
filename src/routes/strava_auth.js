@@ -17,10 +17,15 @@ export const StravaAuthPage = () => {
     const auth_code = searchParams.get('code');
     const state = searchParams.get('state');
     const scope = searchParams.get('scope');
+    const error = searchParams.get('error');
 
     useEffect(() => {
 
         const exchangeAuthToken = async (auth_code) => {
+
+            if (error) {
+                navigate('/dashboard');
+            }
             const api_token = await getAccessTokenSilently();
             const stravaData = await exchangeStravaAuthToken(api_token, auth_code);
             navigate('/dashboard');
