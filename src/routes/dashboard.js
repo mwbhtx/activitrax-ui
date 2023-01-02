@@ -127,6 +127,7 @@ const SpotifyConnect = () => {
     const spotifyAuthUrl = new URL('https://accounts.spotify.com/authorize');
     spotifyAuthUrl.searchParams.append("client_id", '2d496310f6db494791df2b41b9c2342d');
     spotifyAuthUrl.searchParams.append("response_type", "code");
+    spotifyAuthUrl.searchParams.append("show_dialog", "true");
     spotifyAuthUrl.searchParams.append("scope", 'user-read-recently-played,user-read-email,user-read-private');
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_ACTIVITRAX_SPOTIFY_REDIRECT_URI);
 
