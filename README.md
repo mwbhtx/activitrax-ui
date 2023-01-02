@@ -22,7 +22,6 @@ npm start
 ```
 
 ## Live Demonstration
-https://mwbhtx-activitrax.netlify.app/
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
