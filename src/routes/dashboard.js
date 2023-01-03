@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import AppHeader from "../components/AppHeader";
 import SpotifyLogo from '../images/spotify-2.svg';
@@ -15,9 +15,7 @@ export default function Dashboard(props) {
     return (
         <>
             <AppHeader />
-            <Container sx={{ display: 'flex', p: 3, justifyContent: 'center' }}>
-                <ServiceConnectDialogue />
-            </Container>
+            <ServiceConnectDialogue />
         </>
     )
 }
@@ -31,6 +29,20 @@ const ServiceConnectDialogue = () => {
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
+
+
+    const theme = useTheme();
+
+    const styles = {
+        container: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            [theme.breakpoints.down('md')]: {
+                flexDirection: 'column',
+            }
+        }
+    }
 
     useEffect(() => {
 
@@ -76,23 +88,26 @@ const ServiceConnectDialogue = () => {
         )
     }
 
+
     return (
         <>
-            {!stravaConnected && (
-                <>
-                    <StravaConnect />
-                </>
-            )}
-            {!spotifyConnected && (
-                <>
-                    <SpotifyConnect />
-                </>
-            )}
-            {stravaConnected && spotifyConnected && (
-                <>
-                    <LatestStravaActivity />
-                </>
-            )}
+            <Container sx={styles.container}>
+                {!stravaConnected && (
+                    <>
+                        <StravaConnect />
+                    </>
+                )}
+                {!spotifyConnected && (
+                    <>
+                        <SpotifyConnect />
+                    </>
+                )}
+                {stravaConnected && spotifyConnected && (
+                    <>
+                        <LatestStravaActivity />
+                    </>
+                )}
+            </Container>
         </>
     )
 }
@@ -108,7 +123,7 @@ const StravaConnect = () => {
 
     return (
         <>
-            <Paper elevation={0} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', width: '350px', height: '50', m: 2, p: 2 }}>
+            <Paper elevation={1} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', m: 2, p: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img width={50} height={50} alt="Strava Logo" src={StravaLogo} />
                 </Box>
@@ -134,7 +149,7 @@ const SpotifyConnect = () => {
 
     return (
         <>
-            <Paper elevation={0} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', width: '350px', height: '50', m: 2, p: 2 }}>
+            <Paper elevation={1} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', m: 2, p: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <img width={50} height={50} alt="Spotify Logo" src={SpotifyLogo} />
                 </Box>
