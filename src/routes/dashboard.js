@@ -31,14 +31,17 @@ const ServiceConnectDialogue = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
 
 
+    // import useTheme hook so we can apply some breakpoints in our styles
     const theme = useTheme();
 
+    // create a styles object where each key acts similarly to a class name
+    // apply the styling to components by passing the desired key to the component's sx prop
     const styles = {
         container: {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
                 flexDirection: 'column',
             }
         }
