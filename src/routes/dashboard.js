@@ -41,6 +41,7 @@ const ServiceConnectDialogue = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            p: 3,
             [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
                 flexDirection: 'column',
             }
