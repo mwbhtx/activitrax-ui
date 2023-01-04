@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Paper, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import AppHeader from "../components/AppHeader";
 import SpotifyLogo from '../images/spotify-2.svg';
@@ -172,9 +172,31 @@ const LatestStravaActivity = () => {
         <>
             <Container>
                 <Typography variant="h6" sx={{ fontWeight: 800 }}>Latest Strava Activity</Typography>
-                <Card sx={{ m: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <Typography sx={{ m: 3, width: '100%' }} variant="body2">Name / Date / Time / Type / # Songs / Distance</Typography>
-                </Card>
+                <TableContainer component={Paper} sx={{ m: 3 }}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center">Activity Title</TableCell>
+                                <TableCell align="center">Date</TableCell>
+                                <TableCell align="center">Start Time</TableCell>
+                                <TableCell align="center">Type</TableCell>
+                                <TableCell align="center">Distance</TableCell>
+                                <TableCell align="center">Track Count</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align="center">Test Activity Name</TableCell>
+                                <TableCell component="th" scope="row" align="center">11/11/1988</TableCell>
+                                <TableCell component="th" scope="row" align="center">9:00AM</TableCell>
+                                <TableCell component="th" scope="row" align="center">Run</TableCell>
+                                <TableCell component="th" scope="row" align="center">6.3 miles</TableCell>
+                                <TableCell component="th" scope="row" align="center">9</TableCell>
+                            </TableRow>
+
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Container>
         </>
     )
