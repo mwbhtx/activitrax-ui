@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Divider, Icon, IconButton, Stack, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Divider, Icon, IconButton, Stack, Toolbar, Typography, useTheme } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
@@ -9,6 +9,19 @@ import { Link as MuiLink } from "@mui/material";
 
 export default function AppHeader(props) {
     const { isAuthenticated } = useAuth0();
+
+    // import useTheme hook so we can apply some breakpoints in our styles
+    const theme = useTheme();
+
+    // create a styles object where each key acts similar to a class name
+    // apply the styling to components by passing the desired key to the component's sx prop
+    const styles = {
+        largeNavButtons: {
+            [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
+                display: 'none',
+            }
+        }
+    }
 
     return (
         <>
@@ -36,14 +49,14 @@ export default function AppHeader(props) {
                     </Stack>
                     <Box sx={{ flexGrow: 1 }} />
                     {isAuthenticated && (
-                        <Stack spacing={2} direction="row">
+                        <Stack spacing={2} direction="row" sx={styles.largeNavButtons}>
                             <MuiLink component={RouterLink} to="/dashboard" underline="none">
                                 <Button variant="outlined" color="secondary">Dashboard</Button>
                             </MuiLink>
 
                             <MuiLink component={RouterLink} to="/settings" underline="none">
                                 <Button variant="outlined" color="secondary">Settings</Button>
-                            </MuiLink> 
+                            </MuiLink>
 
                             {isAuthenticated && (
                                 <>

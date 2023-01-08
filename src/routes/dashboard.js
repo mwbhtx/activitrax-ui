@@ -34,7 +34,7 @@ const ServiceConnectDialogue = () => {
     // import useTheme hook so we can apply some breakpoints in our styles
     const theme = useTheme();
 
-    // create a styles object where each key acts similarly to a class name
+    // create a styles object where each key acts similar to a class name
     // apply the styling to components by passing the desired key to the component's sx prop
     const styles = {
         container: {
