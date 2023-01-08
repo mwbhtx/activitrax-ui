@@ -205,7 +205,7 @@ const LatestStravaActivity = (props) => {
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.start_time_formatted || ""}</TableCell>
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.type || ""}</TableCell>
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.distance_miles || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.track_count || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.track_count || "0"}</TableCell>
                             </TableRow>
                     </TableBody>
                 </Table>
