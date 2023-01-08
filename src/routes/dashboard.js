@@ -199,6 +199,7 @@ const LatestStravaActivity = (props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+                        {latestActivity && (
                             <TableRow>
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.name || ""}</TableCell>
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.start_date_formatted || ""}</TableCell>
@@ -207,6 +208,17 @@ const LatestStravaActivity = (props) => {
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.distance_miles || ""}</TableCell>
                                 <TableCell component="th" scope="row" align="center">{latestActivity?.track_count || "0"}</TableCell>
                             </TableRow>
+                        )}
+                        {!latestActivity && (
+                            <TableRow>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
