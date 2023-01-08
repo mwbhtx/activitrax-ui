@@ -29,6 +29,8 @@ const ServiceConnectDialogue = () => {
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [latestStravaActivity, setLatestStravaActivity] = useState(null);
+    const [userConfig, setUserConfig] = useState(null);
 
 
     // import useTheme hook so we can apply some breakpoints in our styles
@@ -58,6 +60,9 @@ const ServiceConnectDialogue = () => {
 
                 // get user config
                 const userConfig = await getUserConfig(accessToken);
+                setUserConfig(userConfig);
+
+                console.log(userConfig.last_strava_activity)
 
                 // if user has strava connection
                 if (userConfig.connections.strava) {
@@ -107,7 +112,7 @@ const ServiceConnectDialogue = () => {
                 )}
                 {stravaConnected && spotifyConnected && (
                     <>
-                        <LatestStravaActivity />
+                        <LatestStravaActivity latestActivity={userConfig.last_strava_activity} />
                     </>
                 )}
             </Container>
@@ -165,9 +170,17 @@ const SpotifyConnect = () => {
     )
 }
 
-const LatestStravaActivity = () => {
+const LatestStravaActivity = (props) => {
+
+    const { latestActivity } = props;
 
     const theme = useTheme();
+
+    useEffect(() => {
+
+        console.log(latestActivity)
+
+    }, [latestActivity])
 
     return (
         <>
@@ -175,7 +188,7 @@ const LatestStravaActivity = () => {
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     {/* Add background to table head */}
-                    <TableHead sx={{ backgroundColor: theme.palette.primary.light}}>
+                    <TableHead sx={{ backgroundColor: theme.palette.primary.light }}>
                         <TableRow>
                             <TableCell align="center">Activity Title</TableCell>
                             <TableCell align="center">Date</TableCell>
@@ -186,15 +199,14 @@ const LatestStravaActivity = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell component="th" scope="row" align="center">Test Activity Name</TableCell>
-                            <TableCell component="th" scope="row" align="center">11/11/1988</TableCell>
-                            <TableCell component="th" scope="row" align="center">9:00AM</TableCell>
-                            <TableCell component="th" scope="row" align="center">Run</TableCell>
-                            <TableCell component="th" scope="row" align="center">6.3 miles</TableCell>
-                            <TableCell component="th" scope="row" align="center">9</TableCell>
-                        </TableRow>
-
+                            <TableRow>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.name || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.start_date_formatted || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.start_time_formatted || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.type || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.distance_miles || ""}</TableCell>
+                                <TableCell component="th" scope="row" align="center">{latestActivity?.track_count || ""}</TableCell>
+                            </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
