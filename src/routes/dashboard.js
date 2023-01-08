@@ -41,7 +41,6 @@ const ServiceConnectDialogue = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            p: 3,
             [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
                 flexDirection: 'column',
             }
@@ -95,7 +94,7 @@ const ServiceConnectDialogue = () => {
 
     return (
         <>
-            <Container sx={styles.container}>
+            <Container>
                 {!stravaConnected && (
                     <>
                         <StravaConnect />
@@ -168,36 +167,37 @@ const SpotifyConnect = () => {
 
 const LatestStravaActivity = () => {
 
+    const theme = useTheme();
+
     return (
         <>
-            <Container>
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>Latest Strava Activity</Typography>
-                <TableContainer component={Paper} sx={{ m: 3 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center">Activity Title</TableCell>
-                                <TableCell align="center">Date</TableCell>
-                                <TableCell align="center">Start Time</TableCell>
-                                <TableCell align="center">Type</TableCell>
-                                <TableCell align="center">Distance</TableCell>
-                                <TableCell align="center">Track Count</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell component="th" scope="row" align="center">Test Activity Name</TableCell>
-                                <TableCell component="th" scope="row" align="center">11/11/1988</TableCell>
-                                <TableCell component="th" scope="row" align="center">9:00AM</TableCell>
-                                <TableCell component="th" scope="row" align="center">Run</TableCell>
-                                <TableCell component="th" scope="row" align="center">6.3 miles</TableCell>
-                                <TableCell component="th" scope="row" align="center">9</TableCell>
-                            </TableRow>
+            <Typography variant="h6" sx={{ m: 3, fontWeight: 800 }}>Latest Strava Activity</Typography>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    {/* Add background to table head */}
+                    <TableHead sx={{ backgroundColor: theme.palette.primary.light}}>
+                        <TableRow>
+                            <TableCell align="center">Activity Title</TableCell>
+                            <TableCell align="center">Date</TableCell>
+                            <TableCell align="center">Start Time</TableCell>
+                            <TableCell align="center">Type</TableCell>
+                            <TableCell align="center">Distance</TableCell>
+                            <TableCell align="center">Track Count</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell component="th" scope="row" align="center">Test Activity Name</TableCell>
+                            <TableCell component="th" scope="row" align="center">11/11/1988</TableCell>
+                            <TableCell component="th" scope="row" align="center">9:00AM</TableCell>
+                            <TableCell component="th" scope="row" align="center">Run</TableCell>
+                            <TableCell component="th" scope="row" align="center">6.3 miles</TableCell>
+                            <TableCell component="th" scope="row" align="center">9</TableCell>
+                        </TableRow>
 
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Container>
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
     )
 }
