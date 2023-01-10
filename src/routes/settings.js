@@ -68,13 +68,14 @@ const SettingsContent = () => {
             const api_token = await getAccessTokenSilently();
             const connectedServices = await getUserConfig(api_token);
 
+            console.log(`connectedServices: ${JSON.stringify(connectedServices, null, 2)}`)
             // if user has strava connection
-            if (connectedServices.connections.strava) {
+            if (connectedServices.strava) {
                 setStravaConnected(true);
             }
 
             // if user has spotify connection
-            if (connectedServices.connections.spotify) {
+            if (connectedServices.spotify) {
                 setSpotifyConnected(true);
             }
 
