@@ -62,8 +62,6 @@ const ServiceConnectDialogue = () => {
                 const userConfig = await getUserConfig(accessToken);
                 setUserConfig(userConfig);
 
-                console.log(`userConfig: ${JSON.stringify(userConfig, null, 2)}`)
-
                 // if user has strava connection
                 if (userConfig.strava) {
                     setStravaConnected(true);
@@ -178,7 +176,6 @@ const LatestStravaActivity = (props) => {
 
     useEffect(() => {
 
-        console.log(`last activity: ${latestActivity}`)
 
     }, [latestActivity])
 
