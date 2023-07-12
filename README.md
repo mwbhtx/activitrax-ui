@@ -1,4 +1,2 @@
 # Activitrax
-
-# Run Local 
-npm run dev
+https://activitrax.io/)https://activitrax.io/
