@@ -7,7 +7,7 @@ export const Auth0ProviderWithHistory = ({ children }) => {
 
     const domain = "dev-lpah3aos.us.auth0.com";
     const clientId = "zrhyfRX66bIQ1qXJkBQiJUsbpkBbJtv2";
-    const redirectUri = process.env.REACT_APP_REACT_APP_AUTH0_REDIRECT_URI;
+    const redirectUri = process.env.REACT_APP_AUTH0_REDIRECT_URI;
     const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
 
     const onRedirectCallback = (appState) => {
