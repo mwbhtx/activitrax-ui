@@ -138,7 +138,7 @@ export default function AppHeader(props) {
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <MuiLink component={RouterLink} to="/" underline="none">
                                 <Button variant="text">
-                                    <Typography variant="h6" color="primary.contrastText">activitrax.io</Typography>
+                                    <Typography variant="h6" color="primary.contrastText">activitrax.app</Typography>
                                 </Button>
                             </MuiLink>
                         </Box>
