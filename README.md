@@ -6,4 +6,4 @@ Local Dev
 (Setup .env file with your API keys)
 nvm use 18
 npm i
-npm run start
+npm run dev
