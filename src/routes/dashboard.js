@@ -106,7 +106,7 @@ const StravaConnect = () => {
     stravaAuthUrl.searchParams.append("response_type", "code");
     stravaAuthUrl.searchParams.append("approval_prompt", "force");
     stravaAuthUrl.searchParams.append("scope", strava_scopes);
-    stravaAuthUrl.searchParams.append("redirect_uri", process.env.STRAVA_REDIRECT_URI);
+    stravaAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_STRAVA_REDIRECT_URI);
 
     return (
         <>
@@ -132,7 +132,7 @@ const SpotifyConnect = () => {
     spotifyAuthUrl.searchParams.append("response_type", "code");
     spotifyAuthUrl.searchParams.append("show_dialog", "true");
     spotifyAuthUrl.searchParams.append("scope", spotify_scopes);
-    spotifyAuthUrl.searchParams.append("redirect_uri", process.env.SPOTIFY_REDIRECT_URI);
+    spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_SPOTIFY_REDIRECT_URI);
 
     return (
         <>
