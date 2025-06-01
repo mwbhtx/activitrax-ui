@@ -15,8 +15,6 @@ export const SpotifyAuthPage = () => {
     const { search } = useLocation();
     const searchParams = new URLSearchParams(search);
     const auth_code = searchParams.get('code');
-    const state = searchParams.get('state');
-    const scope = searchParams.get('scope');
     const error = searchParams.get('error');
 
     useEffect(() => {
@@ -47,7 +45,7 @@ export const SpotifyAuthPage = () => {
         }
 
         exchangeAuthToken(auth_code);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [auth_code])
 
     return (

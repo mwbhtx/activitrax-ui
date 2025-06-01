@@ -1,4 +1,4 @@
-import { Box, Card, CardActions, CardContent, CardMedia, CircularProgress, Container, Icon, IconButton, Menu, MenuItem, Paper, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, CircularProgress, Container, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import AppHeader from "../components/AppHeader";
 import StravaLogo from "../images/strava-2.svg";
 import SpotifyLogo from "../images/spotify-2.svg";
@@ -6,8 +6,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useEffect, useState } from "react";
 import { disconnectService, getUserConfig } from "../services/auth0";
 import { useAuth0 } from "@auth0/auth0-react";
-import { disconnectSpotifyAccount } from "../services/spotify";
-import { disconnectStravaAccount } from "../services/strava";
 
 export default function Settings(props) {
 

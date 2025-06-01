@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import { exchangeStravaAuthToken } from "../services/strava";
 import { strava_scopes } from "../services/strava";
@@ -16,7 +16,6 @@ export const StravaAuthPage = () => {
     const { search } = useLocation();
     const searchParams = new URLSearchParams(search);
     const auth_code = searchParams.get('code');
-    const state = searchParams.get('state');
     const scope = searchParams.get('scope');
     const error = searchParams.get('error');
 
@@ -25,7 +24,7 @@ export const StravaAuthPage = () => {
         const exchangeAuthToken = async (auth_code) => {
 
             try {
-                
+
                 if (error) {
                     if (error === 'access_denied') {
                         throw new Error(`user denied access to spotify`)
@@ -44,7 +43,7 @@ export const StravaAuthPage = () => {
                 // exchange auth code for access token and register strava account with user
                 const api_token = await getAccessTokenSilently();
                 await exchangeStravaAuthToken(api_token, auth_code);
-                
+
             }
             catch (e) {
                 console.log(e)
@@ -56,6 +55,7 @@ export const StravaAuthPage = () => {
 
         exchangeAuthToken(auth_code);
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [auth_code])
 
     return (
