@@ -1,2 +1,2 @@
 # Activitrax
-https://activitrax.io/
+https://activitrax.app/

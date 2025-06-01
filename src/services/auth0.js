@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios'
  
 export const getUserConfig = async (api_token) => {
