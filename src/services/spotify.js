@@ -9,7 +9,7 @@ export const exchangeSpotifyAuthToken = async (api_token, auth_token) => {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + api_token
         },
-        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/spotify/exchange_token",
+        url: process.env.ACTIVITRAX_API_URL + "/spotify/exchange_token",
         data: {
             auth_token: auth_token,
         }
