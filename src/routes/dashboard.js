@@ -24,7 +24,8 @@ const ServiceConnectDialogue = () => {
 
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    const [setAccessToken] = useState(null);
+    // eslint-disable-next-line no-unused-vars
+    const [accessToken, setAccessToken] = useState(null);
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
