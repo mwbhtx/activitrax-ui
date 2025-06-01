@@ -1,5 +1,4 @@
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { CircularProgress } from "@mui/material";
+import { Auth0Provider } from "@auth0/auth0-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 

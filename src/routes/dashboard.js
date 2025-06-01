@@ -1,12 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import AppHeader from "../components/AppHeader";
 import SpotifyLogo from '../images/spotify-2.svg';
 import StravaLogo from '../images/strava-2.svg';
 
-import { strava_scopes, useGetStravaAuthToken } from "../services/strava";
-import { useNavigate } from "react-router";
+import { strava_scopes } from "../services/strava";
 import { getUserConfig } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
 
@@ -23,31 +22,13 @@ export default function Dashboard(props) {
 const ServiceConnectDialogue = () => {
 
 
-    const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+    const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    const [accessToken, setAccessToken] = useState(null);
+    const [setAccessToken] = useState(null);
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
-    const [latestStravaActivity, setLatestStravaActivity] = useState(null);
     const [userConfig, setUserConfig] = useState(null);
-
-
-    // import useTheme hook so we can apply some breakpoints in our styles
-    const theme = useTheme();
-
-    // create a styles object where each key acts similar to a class name
-    // apply the styling to components by passing the desired key to the component's sx prop
-    const styles = {
-        container: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
-                flexDirection: 'column',
-            }
-        }
-    }
 
     useEffect(() => {
 
@@ -84,7 +65,7 @@ const ServiceConnectDialogue = () => {
             fetchData();
         }
 
-    }, [getAccessTokenSilently, isAuthenticated]);
+    }, [getAccessTokenSilently, isAuthenticated, setAccessToken]);
 
     if (!dataLoaded) {
         return (

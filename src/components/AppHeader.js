@@ -1,10 +1,10 @@
-import { AppBar, Box, Button, Divider, Drawer, Icon, IconButton, Stack, Toolbar, Typography, useTheme } from "@mui/material"
+import { AppBar, Box, Button, Drawer, IconButton, Stack, Toolbar, Typography, useTheme } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import LoginButton from "./LoginButton";
 import SignupButton from "./SignupButton";
-import { Link as RouterLink, redirect } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
 import { Fragment, useState } from "react";
 import GridViewIcon from '@mui/icons-material/GridView';

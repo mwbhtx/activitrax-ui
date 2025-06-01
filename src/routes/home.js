@@ -1,9 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Image } from "@mui/icons-material";
-import { Box, Container, Paper, Stack, Typography } from "@mui/material";
+import { Paper, Stack, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import LoginButton from "../components/LoginButton";
 import SignupButton from "../components/SignupButton";
@@ -14,7 +12,6 @@ import RunningImage01 from "../images/pexels-rosemary-ketchum-1564466.jpg";
 export default function Home() {
 
     const { isLoading, isAuthenticated } = useAuth0();
-    const navigate = useNavigate();
 
     if (isLoading) {
         return (
