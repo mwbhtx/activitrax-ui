@@ -6,7 +6,7 @@ import LoginButton from "./LoginButton";
 import SignupButton from "./SignupButton";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import GridViewIcon from '@mui/icons-material/GridView';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
