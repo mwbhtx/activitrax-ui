@@ -3,7 +3,7 @@ import axios from 'axios'
 export const getUserConfig = async (api_token) => {
     const reqConfig = {
         method: "GET",
-        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/auth0/user_config",
+        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/app/user_config",
         headers: {
             "Content-Type": "application/json",
             "authorization": "Bearer " + api_token
@@ -20,7 +20,7 @@ export const disconnectService = async (api_token, service_name) => {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + api_token
         },
-        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/auth0/disconnect_service",
+        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/app/disconnect_service",
         data: {
             service_name: service_name
         }
