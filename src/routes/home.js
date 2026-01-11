@@ -1,12 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Navigate } from "react-router";
 import AppHeader from "../components/AppHeader";
 import LoginButton from "../components/LoginButton";
 import SignupButton from "../components/SignupButton";
 import ActivitraxLogo from "../images/activitrax-logo.svg";
-import RunningImage01 from "../images/pexels-rosemary-ketchum-1564466.jpg";
+import RunningImage01 from "../images/pexels-cottonbro-5319375.jpg";
 
 
 export default function Home() {
@@ -45,13 +45,25 @@ function AuthDialog(props) {
 
     return (
         <>
-            <Paper elevation={0} sx={{ width: 300, p: 3, m: 3 }}>
+            <Box
+                sx={{
+                    width: 320,
+                    p: 4,
+                    m: 3,
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    borderRadius: 3,
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                }}
+            >
                 <Stack spacing={10} direction="column">
                     <Stack spacing={2}>
                         <Stack spacing={2}>
                             <img width={'100%'} height={200} alt="Activitrax Logo" src={ActivitraxLogo} />
                         </Stack>
-                        <Typography variant="body2" sx={{ fontSize: 16, fontWeight: 400, textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ fontSize: 16, fontWeight: 400, textAlign: 'center', color: 'rgba(0, 0, 0, 0.8)' }}>
                             Synchronize your Strava activities with your favorite music streaming service.
                         </Typography>
                     </Stack>
@@ -60,7 +72,7 @@ function AuthDialog(props) {
                         <SignupButton />
                     </Stack>
                 </Stack>
-            </Paper>
+            </Box>
         </>
     )
 }

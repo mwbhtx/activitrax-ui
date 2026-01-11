@@ -16,56 +16,54 @@ export default function AppHeader(props) {
     // import useTheme hook so we can apply some breakpoints in our styles
     const theme = useTheme();
 
-    // create a styles object where each key acts similar to a class name
-    // apply the styling to components by passing the desired key to the component's sx prop
     const styles = {
         largeNavButtons: {
-            [theme.breakpoints.down('md')]: {   // apply styles when screen width is less than 960px
+            [theme.breakpoints.down('md')]: {
                 display: 'none',
             }
         },
         drawerButton: {
-            [theme.breakpoints.up('md')]: {   // apply styles when screen width is less than 960px
+            [theme.breakpoints.up('md')]: {
                 display: 'none',
-            }
+            },
+            color: '#ffffff',
+            '&:hover': {
+                backgroundColor: 'rgba(255, 138, 101, 0.08)',
+            },
         },
         drawerNavLinkButtons: {
-            width: '200px',
+            width: '220px',
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            color: 'white',
-            // add hover effect
+            color: 'rgba(255, 255, 255, 0.9)',
+            padding: '12px 16px',
             '&:hover': {
-                backgroundColor: theme.palette.primary.light,
+                backgroundColor: 'rgba(255, 138, 101, 0.12)',
+                color: '#FF8A65',
             },
-            // adjust border radius
             borderRadius: '0px',
+            transition: 'all 0.2s ease',
         },
-        // Styles drawer container with the same background color as the app bar
         drawerContainer: {
-            width: '200px',
+            width: '220px',
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: '#1e1e1e',
+            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
         },
         logoutButton: {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            // override contained variant styles
             "&.MuiButton-contained": {
-                // override default background color
-                backgroundColor: theme.palette.secondary.main,
-                // override default hover background color
+                backgroundColor: '#FC4C02',
                 "&:hover": {
-                    backgroundColor: theme.palette.secondary.dark,
+                    backgroundColor: '#D94000',
                 },
-                // override text alignment of button label
                 textAlign: "left",
-                // override corners of button
                 borderRadius: "0px",
             },
         }

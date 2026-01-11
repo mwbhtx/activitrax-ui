@@ -1,13 +1,88 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, CircularProgress, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Collapse, Container, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useEffect, useState } from "react";
 import AppHeader from "../components/AppHeader";
 import SpotifyLogo from '../images/spotify-2.svg';
 import StravaLogo from '../images/strava-2.svg';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningIcon from '@mui/icons-material/Warning';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 import { strava_scopes } from "../services/strava";
-import { getUserConfig } from "../services/auth0";
+import { getUserConfig, getUserActivities, getActivityTracklist } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
+import { useAudio } from "../contexts/AudioContext";
+
+// Activity processing status constants (must match backend)
+const ACTIVITY_STATUS = {
+    PROCESSING: 'processing',
+    SUCCESS: 'success',
+    NO_SPOTIFY: 'no_spotify',
+    SPOTIFY_ERROR: 'spotify_error',
+    NO_TRACKS: 'no_tracks',
+    STRAVA_UPDATE_ERROR: 'strava_update_error'
+};
+
+// Status display configuration with dark theme colors
+const getStatusConfig = (status) => {
+    switch (status) {
+        case ACTIVITY_STATUS.SUCCESS:
+            return {
+                label: 'Added',
+                icon: <CheckCircleIcon fontSize="small" />,
+                tooltip: 'Tracklist added to your Strava activity',
+                sx: { borderColor: '#22C55E', color: '#22C55E' }
+            };
+        case ACTIVITY_STATUS.PROCESSING:
+            return {
+                label: 'Processing',
+                icon: <HourglassEmptyIcon fontSize="small" />,
+                tooltip: 'Fetching your tracks from Spotify',
+                sx: { borderColor: 'rgba(255, 255, 255, 0.5)', color: 'rgba(255, 255, 255, 0.5)' }
+            };
+        case ACTIVITY_STATUS.NO_SPOTIFY:
+            return {
+                label: 'Not Connected',
+                icon: <WarningIcon fontSize="small" />,
+                tooltip: 'Spotify was not connected when this activity was recorded',
+                sx: { borderColor: '#f5a623', color: '#f5a623' }
+            };
+        case ACTIVITY_STATUS.SPOTIFY_ERROR:
+            return {
+                label: 'Spotify Error',
+                icon: <ErrorIcon fontSize="small" />,
+                tooltip: 'Failed to fetch tracks from Spotify',
+                sx: { borderColor: '#ff5252', color: '#ff5252' }
+            };
+        case ACTIVITY_STATUS.NO_TRACKS:
+            return {
+                label: 'No Music',
+                icon: <WarningIcon fontSize="small" />,
+                tooltip: 'No Spotify tracks were playing during this activity',
+                sx: { borderColor: 'rgba(255, 255, 255, 0.4)', color: 'rgba(255, 255, 255, 0.4)' }
+            };
+        case ACTIVITY_STATUS.STRAVA_UPDATE_ERROR:
+            return {
+                label: 'Strava Error',
+                icon: <ErrorIcon fontSize="small" />,
+                tooltip: 'Tracks were saved but failed to update Strava description',
+                sx: { borderColor: '#ff5252', color: '#ff5252' }
+            };
+        default:
+            return {
+                label: 'Pending',
+                icon: null,
+                tooltip: 'Waiting to process',
+                sx: { borderColor: 'rgba(255, 255, 255, 0.4)', color: 'rgba(255, 255, 255, 0.4)' }
+            };
+    }
+};
 
 export default function Dashboard(props) {
 
@@ -21,28 +96,22 @@ export default function Dashboard(props) {
 
 const ServiceConnectDialogue = () => {
 
-
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    // eslint-disable-next-line no-unused-vars
-    const [accessToken, setAccessToken] = useState(null);
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
-    const [userConfig, setUserConfig] = useState(null);
+    const [activities, setActivities] = useState([]);
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
-
                 // get api access token
                 const accessToken = await getAccessTokenSilently();
-                setAccessToken(accessToken);
 
                 // get user config
                 const userConfig = await getUserConfig(accessToken);
-                setUserConfig(userConfig);
 
                 // if user has strava connection
                 if (userConfig.strava) {
@@ -52,6 +121,12 @@ const ServiceConnectDialogue = () => {
                 // if user has spotify connection
                 if (userConfig.spotify) {
                     setSpotifyConnected(true);
+                }
+
+                // if both services connected, fetch activities
+                if (userConfig.strava && userConfig.spotify) {
+                    const userActivities = await getUserActivities(accessToken);
+                    setActivities(userActivities || []);
                 }
 
                 // finally
@@ -66,7 +141,7 @@ const ServiceConnectDialogue = () => {
             fetchData();
         }
 
-    }, [getAccessTokenSilently, isAuthenticated, setAccessToken]);
+    }, [getAccessTokenSilently, isAuthenticated]);
 
     if (!dataLoaded) {
         return (
@@ -92,7 +167,7 @@ const ServiceConnectDialogue = () => {
                 )}
                 {stravaConnected && spotifyConnected && (
                     <>
-                        <LatestStravaActivity latestActivity={userConfig.last_strava_activity} />
+                        <ActivitiesTable activities={activities} />
                     </>
                 )}
             </Container>
@@ -110,17 +185,39 @@ const StravaConnect = () => {
     stravaAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_STRAVA_REDIRECT_URI);
 
     return (
-        <>
-            <Paper elevation={1} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', m: 2, p: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <img width={50} height={50} alt="Strava Logo" src={StravaLogo} />
+        <Paper
+            elevation={0}
+            sx={{
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                m: 2,
+                p: 4,
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: 3,
+                maxWidth: 400,
+                mx: 'auto',
+            }}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Box sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(252, 76, 2, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <img width={40} height={40} alt="Strava Logo" src={StravaLogo} />
                 </Box>
-                <Typography variant="body2" sx={{ m: 3, fontSize: 16, fontWeight: 400, textAlign: 'center' }}>
-                    A connection to your Strava account is required to synchronize your Strava activities with your Spotify music.
-                </Typography>
-                <Button href={`${stravaAuthUrl}`} variant="contained" sx={{ width: '100%', whiteSpace: 'nowrap' }}>Connect Strava</Button>
-            </Paper>
-        </>
+            </Box>
+            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)' }}>
+                Connect your Strava account to synchronize activities with your Spotify music.
+            </Typography>
+            <Button href={`${stravaAuthUrl}`} variant="contained" sx={{ width: '100%' }}>
+                Connect Strava
+            </Button>
+        </Paper>
     )
 
 }
@@ -136,70 +233,381 @@ const SpotifyConnect = () => {
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_SPOTIFY_REDIRECT_URI);
 
     return (
-        <>
-            <Paper elevation={1} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', m: 2, p: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <img width={50} height={50} alt="Spotify Logo" src={SpotifyLogo} />
+        <Paper
+            elevation={0}
+            sx={{
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                m: 2,
+                p: 4,
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: 3,
+                maxWidth: 400,
+                mx: 'auto',
+            }}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Box sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(255, 138, 101, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <img width={40} height={40} alt="Spotify Logo" src={SpotifyLogo} />
                 </Box>
-                <Typography variant="body2" sx={{ m: 3, fontSize: 16, fontWeight: 400, textAlign: 'center' }}>
-                    A connection to your Spotify account is required to synchronize your Strava activities with your Spotify music.
-                </Typography>
-                <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', whiteSpace: 'nowrap' }}>Connect Spotify</Button>
-            </Paper>
-        </>
+            </Box>
+            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)' }}>
+                Connect your Spotify account to synchronize activities with your listening history.
+            </Typography>
+            <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', backgroundColor: '#FF8A65', color: '#000', '&:hover': { backgroundColor: '#E64A19' } }}>
+                Connect Spotify
+            </Button>
+        </Paper>
     )
 }
 
-const LatestStravaActivity = (props) => {
+const ActivityStatus = ({ status }) => {
+    const isSuccess = status === ACTIVITY_STATUS.SUCCESS;
+    const config = getStatusConfig(status);
 
-    const { latestActivity } = props;
+    return (
+        <Tooltip title={config.tooltip} arrow>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                {isSuccess ? (
+                    <>
+                        <CheckCircleIcon sx={{ color: '#22C55E', fontSize: 18 }} />
+                        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>Processed</Typography>
+                    </>
+                ) : (
+                    <>
+                        <ErrorIcon sx={{ color: '#ff5252', fontSize: 18 }} />
+                        <Typography variant="body2" sx={{ color: '#ff5252' }}>{config.label}</Typography>
+                    </>
+                )}
+            </Box>
+        </Tooltip>
+    );
+};
 
-    const theme = useTheme();
+// Helper to format activity data for display
+const formatActivity = (activity) => {
+    const distanceMiles = activity.distance ? (activity.distance * 0.000621371).toFixed(2) : '0.00';
 
-    useEffect(() => {
+    let dateFormatted = '';
+    let timeFormatted = '';
 
-    }, [latestActivity])
+    if (activity.start_date_local) {
+        const date = new Date(activity.start_date_local);
+        // Format: DD/MM/YYYY
+        dateFormatted = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+        // Format: h:mm AM/PM
+        timeFormatted = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
+    return {
+        ...activity,
+        distance_miles: distanceMiles,
+        start_date_formatted: dateFormatted,
+        start_time_formatted: timeFormatted
+    };
+};
+
+const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
+    const { progress } = useAudio();
+
+    if (!hasPreview) {
+        return <Box sx={{ width: 36, height: 36, mr: 1.5 }} />;
+    }
+
+    return (
+        <Tooltip title={isPlaying ? "Pause preview" : "Play 30s preview"}>
+            <Box
+                onClick={(e) => { e.stopPropagation(); onPlayToggle(); }}
+                sx={{
+                    position: 'relative',
+                    width: 36,
+                    height: 36,
+                    mr: 1.5,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                {/* Background circle */}
+                <CircularProgress
+                    variant="determinate"
+                    value={100}
+                    size={36}
+                    thickness={3}
+                    sx={{
+                        position: 'absolute',
+                        color: isPlaying ? 'rgba(255, 138, 101, 0.2)' : 'rgba(255, 138, 101, 0.3)',
+                    }}
+                />
+                {/* Progress circle */}
+                {isPlaying && (
+                    <CircularProgress
+                        variant="determinate"
+                        value={progress}
+                        size={36}
+                        thickness={3}
+                        sx={{
+                            position: 'absolute',
+                            color: '#FF8A65',
+                            transition: 'none',
+                        }}
+                    />
+                )}
+                {/* Play/Pause icon */}
+                <Box
+                    sx={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        backgroundColor: '#FF8A65',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.15s ease',
+                        '&:hover': {
+                            transform: 'scale(1.1)',
+                        },
+                    }}
+                >
+                    {isPlaying ? (
+                        <PauseIcon sx={{ color: '#fff', fontSize: 18 }} />
+                    ) : (
+                        <PlayArrowIcon sx={{ color: '#fff', fontSize: 18, ml: '2px' }} />
+                    )}
+                </Box>
+            </Box>
+        </Tooltip>
+    );
+};
+
+const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
+    const hasPreview = !!track.preview_url;
+
+    return (
+        <ListItem
+            sx={{ py: 1, px: 2 }}
+            secondaryAction={
+                track.spotify_url && (
+                    <Tooltip title="Open in Spotify">
+                        <IconButton
+                            size="small"
+                            component="a"
+                            href={track.spotify_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{
+                                color: 'rgba(255, 138, 101, 0.7)',
+                                '&:hover': {
+                                    color: '#FF8A65',
+                                    backgroundColor: 'rgba(255, 138, 101, 0.1)',
+                                },
+                            }}
+                        >
+                            <OpenInNewIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                )
+            }
+        >
+            <PlayButton isPlaying={isPlaying} onPlayToggle={onPlayToggle} hasPreview={hasPreview} />
+            <ListItemAvatar>
+                <Avatar
+                    variant="rounded"
+                    src={track.album_image}
+                    alt={track.album}
+                    sx={{ width: 40, height: 40 }}
+                >
+                    {!track.album_image && track.name?.charAt(0)}
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+                primary={track.name}
+                secondary={`${track.artist} • ${track.album}`}
+                primaryTypographyProps={{ variant: 'body2', noWrap: true }}
+                secondaryTypographyProps={{ variant: 'caption', noWrap: true }}
+                sx={{ mr: 4 }}
+            />
+        </ListItem>
+    );
+};
+
+const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading }) => {
+    const formatted = formatActivity(activity);
+    const hasTracklist = formatted.track_count > 0;
+    const { currentTrack, isPlaying, play, togglePlayPause } = useAudio();
+
+    const handlePlayToggle = (track) => {
+        // Check if this track is currently playing
+        const isCurrentTrack = currentTrack?.preview_url === track.preview_url;
+
+        if (isCurrentTrack) {
+            togglePlayPause();
+        } else {
+            play(track);
+        }
+    };
+
+    const isTrackPlaying = (track) => {
+        return isPlaying && currentTrack?.preview_url === track.preview_url;
+    };
 
     return (
         <>
-            <Typography variant="h6" sx={{ m: 3, fontWeight: 800 }}>Latest Strava Activity</Typography>
+            <TableRow
+                sx={{
+                    '& > *': { borderBottom: isExpanded ? 'none' : undefined },
+                    cursor: hasTracklist ? 'pointer' : 'default',
+                    '&:hover': hasTracklist ? { backgroundColor: 'rgba(255, 138, 101, 0.04)' } : {}
+                }}
+                onClick={() => hasTracklist && onExpandClick()}
+            >
+                <TableCell align="center" sx={{ width: 50 }}>
+                    {hasTracklist && (
+                        <IconButton size="small" onClick={(e) => { e.stopPropagation(); onExpandClick(); }}>
+                            {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    )}
+                </TableCell>
+                <TableCell align="center">{formatted.name || ""}</TableCell>
+                <TableCell align="center">{formatted.start_date_formatted}</TableCell>
+                <TableCell align="center">{formatted.start_time_formatted}</TableCell>
+                <TableCell align="center">{formatted.type || ""}</TableCell>
+                <TableCell align="center">{formatted.distance_miles} mi</TableCell>
+                <TableCell align="center">{formatted.track_count ?? '-'}</TableCell>
+                <TableCell align="center">
+                    <ActivityStatus status={formatted.processing_status} />
+                </TableCell>
+            </TableRow>
+            {hasTracklist && (
+                <TableRow>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                        <Collapse in={isExpanded} timeout={300} unmountOnExit>
+                            <Box sx={{ py: 2, px: 4, minHeight: 100 }}>
+                                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
+                                    Tracklist
+                                </Typography>
+                                {isLoading || tracklist.length === 0 ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 60 }}>
+                                        <CircularProgress size={24} sx={{ color: '#FC4C02' }} />
+                                    </Box>
+                                ) : (
+                                    <List dense sx={{ bgcolor: 'rgba(255, 138, 101, 0.04)', borderRadius: 2, border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                                        {tracklist.map((track, index) => (
+                                            <TrackItem
+                                                key={index}
+                                                track={track}
+                                                isPlaying={isTrackPlaying(track)}
+                                                onPlayToggle={() => handlePlayToggle(track)}
+                                            />
+                                        ))}
+                                    </List>
+                                )}
+                            </Box>
+                        </Collapse>
+                    </TableCell>
+                </TableRow>
+            )}
+        </>
+    );
+};
+
+const ActivitiesTable = ({ activities }) => {
+    const { getAccessTokenSilently } = useAuth0();
+    const [expandedId, setExpandedId] = useState(null);
+    const [tracklists, setTracklists] = useState({});
+    const [loadingId, setLoadingId] = useState(null);
+
+    // Sort activities by start_date descending (newest first)
+    const sortedActivities = [...activities].sort((a, b) =>
+        new Date(b.start_date) - new Date(a.start_date)
+    );
+
+    const handleExpandClick = async (activityId) => {
+        if (expandedId === activityId) {
+            setExpandedId(null);
+            return;
+        }
+
+        // If already loaded, expand immediately
+        if (tracklists[activityId]) {
+            setExpandedId(activityId);
+            return;
+        }
+
+        // Otherwise, fetch data first, then expand
+        setLoadingId(activityId);
+        try {
+            const token = await getAccessTokenSilently();
+            const tracks = await getActivityTracklist(token, activityId);
+            setTracklists(prev => ({ ...prev, [activityId]: tracks }));
+            // Expand after data is loaded so collapse knows the final height
+            setExpandedId(activityId);
+        } catch (err) {
+            console.error('Failed to fetch tracklist:', err);
+        } finally {
+            setLoadingId(null);
+        }
+    };
+
+    return (
+        <>
+            <Typography variant="h6" sx={{ m: 3, fontWeight: 800 }}>Your Activities</Typography>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    {/* Add background to table head */}
-                    <TableHead sx={{ backgroundColor: theme.palette.primary.light }}>
+                <Table sx={{ minWidth: 650 }} aria-label="activities table">
+                    <TableHead>
                         <TableRow>
+                            <TableCell sx={{ width: 50 }} />
                             <TableCell align="center">Activity Title</TableCell>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Start Time</TableCell>
                             <TableCell align="center">Type</TableCell>
                             <TableCell align="center">Distance</TableCell>
-                            <TableCell align="center">Track Count</TableCell>
+                            <TableCell align="center">Tracks</TableCell>
+                            <TableCell align="center">Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {latestActivity && (
+                        {sortedActivities.length > 0 ? (
+                            sortedActivities.map((activity) => (
+                                <ActivityRow
+                                    key={activity.id}
+                                    activity={activity}
+                                    isExpanded={expandedId === activity.id}
+                                    onExpandClick={() => handleExpandClick(activity.id)}
+                                    tracklist={tracklists[activity.id] || []}
+                                    isLoading={loadingId === activity.id}
+                                />
+                            ))
+                        ) : (
                             <TableRow>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.name || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.start_date_formatted || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.start_time_formatted || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.type || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.distance_miles + " miles" || ""}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{latestActivity?.track_count || "0"}</TableCell>
-                            </TableRow>
-                        )}
-                        {!latestActivity && (
-                            <TableRow>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
-                                <TableCell component="th" scope="row" align="center">{"N/A"}</TableCell>
+                                <TableCell colSpan={8} align="center">
+                                    <Typography variant="body2" sx={{ py: 2 }}>
+                                        No activities yet. Complete a Strava activity while listening to Spotify to see it here!
+                                    </Typography>
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
         </>
-    )
+    );
 }
