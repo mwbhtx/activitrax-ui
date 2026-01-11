@@ -68,8 +68,8 @@ function AuthDialog(props) {
                         </Typography>
                     </Stack>
                     <Stack spacing={2}>
-                        <LoginButton />
                         <SignupButton />
+                        <LoginButton />
                     </Stack>
                 </Stack>
             </Box>
