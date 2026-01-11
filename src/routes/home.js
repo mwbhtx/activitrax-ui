@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Navigate } from "react-router";
 import AppHeader from "../components/AppHeader";
@@ -21,58 +21,88 @@ export default function Home() {
 
     return (
         <>
-            <AppHeader />
+            {isAuthenticated && <AppHeader />}
             {isAuthenticated ? <Navigate to="/dashboard" /> : <HomeComponent />}
         </>
     )
 }
 
 const HomeComponent = () => {
-
     return (
-        <>
-            {/* <img width={'100%'} height={'100%'} alt="test img" src={RunningImage01} /> */}
-            <Grid2 container sx={{ backgroundSize: 'cover', backgroundImage: `url(${RunningImage01})`, position: 'absolute', bottom: 0, right: 0, top: 0, left: 0 }}>
-                <Grid2 xs={16} display="flex" justifyContent="center" alignItems="center">
-                    <AuthDialog />
-                </Grid2>
+        <Grid2
+            container
+            sx={{
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundImage: `url(${RunningImage01})`,
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                top: 0,
+                left: 0,
+                overflow: 'auto',
+            }}
+        >
+            <Grid2 xs={12} display="flex" justifyContent="center" alignItems="center">
+                <AuthDialog />
             </Grid2>
-        </>
-    )
-}
+        </Grid2>
+    );
+};
 
-function AuthDialog(props) {
+function AuthDialog() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <>
-            <Box
-                sx={{
-                    width: 320,
-                    p: 4,
-                    m: 3,
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    borderRadius: 3,
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                }}
-            >
-                <Stack spacing={10} direction="column">
-                    <Stack spacing={2}>
-                        <Stack spacing={2}>
-                            <img width={'100%'} height={200} alt="Activitrax Logo" src={ActivitraxLogo} />
-                        </Stack>
-                        <Typography variant="body2" sx={{ fontSize: 16, fontWeight: 400, textAlign: 'center', color: 'rgba(0, 0, 0, 0.8)' }}>
-                            Synchronize your Strava activities with your favorite music streaming service.
-                        </Typography>
-                    </Stack>
-                    <Stack spacing={2}>
-                        <SignupButton />
-                        <LoginButton />
-                    </Stack>
+        <Box
+            sx={{
+                width: { xs: '100%', sm: 360 },
+                maxWidth: '100%',
+                minHeight: { xs: '70vh', sm: 'auto' },
+                p: { xs: 4, sm: 4 },
+                m: { xs: 2, sm: 3 },
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                borderRadius: { xs: 2, sm: 3 },
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}
+        >
+            <Stack spacing={{ xs: 6, sm: 6 }} direction="column">
+                <Stack spacing={2}>
+                    <Box
+                        component="img"
+                        src={ActivitraxLogo}
+                        alt="Activitrax Logo"
+                        sx={{
+                            width: '100%',
+                            height: isMobile ? 140 : 180,
+                            objectFit: 'contain',
+                        }}
+                    />
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            fontSize: { xs: 14, sm: 16 },
+                            fontWeight: 400,
+                            textAlign: 'center',
+                            color: 'rgba(0, 0, 0, 0.8)',
+                            px: { xs: 1, sm: 0 },
+                        }}
+                    >
+                        Synchronize your Strava activities with your favorite music streaming service.
+                    </Typography>
                 </Stack>
-            </Box>
-        </>
-    )
+                <Stack spacing={2}>
+                    <SignupButton />
+                    <LoginButton />
+                </Stack>
+            </Stack>
+        </Box>
+    );
 }

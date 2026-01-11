@@ -203,7 +203,7 @@ const StravaConnect = () => {
                 <Box sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: 'rgba(252, 76, 2, 0.1)',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -251,7 +251,7 @@ const SpotifyConnect = () => {
                 <Box sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: 'rgba(255, 138, 101, 0.1)',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -262,7 +262,7 @@ const SpotifyConnect = () => {
             <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)' }}>
                 Connect your Spotify account to synchronize activities with your listening history.
             </Typography>
-            <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', backgroundColor: '#FF8A65', color: '#000', '&:hover': { backgroundColor: '#E64A19' } }}>
+            <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', backgroundColor: '#A78BFA', color: '#000', '&:hover': { backgroundColor: '#7C3AED' } }}>
                 Connect Spotify
             </Button>
         </Paper>
@@ -353,7 +353,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                     thickness={3}
                     sx={{
                         position: 'absolute',
-                        color: isPlaying ? 'rgba(255, 138, 101, 0.2)' : 'rgba(255, 138, 101, 0.3)',
+                        color: isPlaying ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)',
                     }}
                 />
                 {/* Progress circle */}
@@ -365,7 +365,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                         thickness={3}
                         sx={{
                             position: 'absolute',
-                            color: '#FF8A65',
+                            color: '#A78BFA',
                             transition: 'none',
                         }}
                     />
@@ -376,7 +376,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                         width: 28,
                         height: 28,
                         borderRadius: '50%',
-                        backgroundColor: '#FF8A65',
+                        backgroundColor: '#A78BFA',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -414,10 +414,10 @@ const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
                             sx={{
-                                color: 'rgba(255, 138, 101, 0.7)',
+                                color: 'rgba(139, 92, 246, 0.7)',
                                 '&:hover': {
-                                    color: '#FF8A65',
-                                    backgroundColor: 'rgba(255, 138, 101, 0.1)',
+                                    color: '#A78BFA',
+                                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
                                 },
                             }}
                         >
@@ -475,7 +475,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                 sx={{
                     '& > *': { borderBottom: isExpanded ? 'none' : undefined },
                     cursor: hasTracklist ? 'pointer' : 'default',
-                    '&:hover': hasTracklist ? { backgroundColor: 'rgba(255, 138, 101, 0.04)' } : {}
+                    '&:hover': hasTracklist ? { backgroundColor: 'rgba(139, 92, 246, 0.04)' } : {}
                 }}
                 onClick={() => hasTracklist && onExpandClick()}
             >
@@ -506,10 +506,10 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                                 </Typography>
                                 {isLoading || tracklist.length === 0 ? (
                                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 60 }}>
-                                        <CircularProgress size={24} sx={{ color: '#FC4C02' }} />
+                                        <CircularProgress size={24} sx={{ color: '#8B5CF6' }} />
                                     </Box>
                                 ) : (
-                                    <List dense sx={{ bgcolor: 'rgba(255, 138, 101, 0.04)', borderRadius: 2, border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                                    <List dense sx={{ bgcolor: 'rgba(139, 92, 246, 0.04)', borderRadius: 2, border: '1px solid rgba(255, 255, 255, 0.06)' }}>
                                         {tracklist.map((track, index) => (
                                             <TrackItem
                                                 key={index}

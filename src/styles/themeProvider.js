@@ -4,15 +4,15 @@ export const themeOptions = {
     palette: {
         mode: 'dark',
         primary: {
-            main: '#FC4C02',
-            light: '#FF6B2C',
-            dark: '#D94000',
+            main: '#8B5CF6',
+            light: '#A78BFA',
+            dark: '#7C3AED',
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#FF8A65',
-            light: '#FFAB91',
-            dark: '#E64A19',
+            main: '#C4B5FD',
+            light: '#DDD6FE',
+            dark: '#A78BFA',
             contrastText: '#000000',
         },
         success: {
@@ -20,27 +20,27 @@ export const themeOptions = {
             contrastText: '#ffffff',
         },
         background: {
-            default: '#121212',
-            paper: '#1e1e1e',
+            default: '#0F0B1A',
+            paper: '#1A1425',
         },
         text: {
             primary: '#ffffff',
             secondary: 'rgba(255, 255, 255, 0.7)',
             disabled: 'rgba(255, 255, 255, 0.5)',
         },
-        divider: 'rgba(255, 255, 255, 0.12)',
+        divider: 'rgba(139, 92, 246, 0.15)',
         error: {
-            main: '#ff5252',
+            main: '#EF4444',
         },
         warning: {
-            main: '#f5a623',
+            main: '#F59E0B',
         },
         info: {
-            main: '#FF8A65',
+            main: '#A78BFA',
         },
         action: {
-            hover: 'rgba(255, 138, 101, 0.08)',
-            selected: 'rgba(255, 138, 101, 0.16)',
+            hover: 'rgba(139, 92, 246, 0.08)',
+            selected: 'rgba(139, 92, 246, 0.16)',
         },
     },
     typography: {
@@ -57,11 +57,11 @@ export const themeOptions = {
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                    backgroundColor: '#1e1e1e',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: '#1A1425',
+                    border: '1px solid rgba(139, 92, 246, 0.15)',
                     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                     '&:hover': {
-                        borderColor: 'rgba(255, 138, 101, 0.3)',
+                        borderColor: 'rgba(139, 92, 246, 0.4)',
                     },
                 },
             },
@@ -70,7 +70,7 @@ export const themeOptions = {
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                    backgroundColor: '#1e1e1e',
+                    backgroundColor: '#1A1425',
                 },
             },
         },
@@ -83,17 +83,17 @@ export const themeOptions = {
                     transition: 'all 0.2s ease',
                 },
                 contained: {
-                    backgroundColor: '#FC4C02',
+                    backgroundColor: '#8B5CF6',
                     '&:hover': {
-                        backgroundColor: '#D94000',
+                        backgroundColor: '#7C3AED',
                     },
                 },
                 outlined: {
-                    borderColor: 'rgba(252, 76, 2, 0.5)',
-                    color: '#FC4C02',
+                    borderColor: 'rgba(139, 92, 246, 0.5)',
+                    color: '#A78BFA',
                     '&:hover': {
-                        borderColor: '#FC4C02',
-                        backgroundColor: 'rgba(252, 76, 2, 0.08)',
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.08)',
                     },
                 },
             },
@@ -101,8 +101,8 @@ export const themeOptions = {
         MuiAppBar: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#1e1e1e',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: '#1A1425',
+                    borderBottom: '1px solid rgba(139, 92, 246, 0.15)',
                     boxShadow: 'none',
                 },
             },
@@ -111,7 +111,7 @@ export const themeOptions = {
             styleOverrides: {
                 root: {
                     '& .MuiTableCell-head': {
-                        backgroundColor: '#FC4C02',
+                        backgroundColor: '#8B5CF6',
                         color: '#ffffff',
                         fontWeight: 600,
                     },
@@ -122,7 +122,7 @@ export const themeOptions = {
             styleOverrides: {
                 root: {
                     '&:hover': {
-                        backgroundColor: 'rgba(255, 138, 101, 0.04)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.04)',
                     },
                 },
             },
@@ -130,7 +130,7 @@ export const themeOptions = {
         MuiTableCell: {
             styleOverrides: {
                 root: {
-                    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+                    borderBottomColor: 'rgba(139, 92, 246, 0.15)',
                 },
             },
         },
@@ -138,9 +138,9 @@ export const themeOptions = {
             styleOverrides: {
                 switchBase: {
                     '&.Mui-checked': {
-                        color: '#FC4C02',
+                        color: '#8B5CF6',
                         '& + .MuiSwitch-track': {
-                            backgroundColor: '#FC4C02',
+                            backgroundColor: '#8B5CF6',
                         },
                     },
                 },
@@ -149,16 +149,16 @@ export const themeOptions = {
         MuiDrawer: {
             styleOverrides: {
                 paper: {
-                    backgroundColor: '#1e1e1e',
-                    borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: '#1A1425',
+                    borderRight: '1px solid rgba(139, 92, 246, 0.15)',
                 },
             },
         },
         MuiMenu: {
             styleOverrides: {
                 paper: {
-                    backgroundColor: '#2a2a2a',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: '#241D30',
+                    border: '1px solid rgba(139, 92, 246, 0.15)',
                 },
             },
         },
@@ -166,7 +166,7 @@ export const themeOptions = {
             styleOverrides: {
                 root: {
                     '&:hover': {
-                        backgroundColor: 'rgba(255, 138, 101, 0.08)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.08)',
                     },
                 },
             },
@@ -181,7 +181,7 @@ export const themeOptions = {
         MuiCircularProgress: {
             styleOverrides: {
                 colorSecondary: {
-                    color: '#FC4C02',
+                    color: '#8B5CF6',
                 },
             },
         },

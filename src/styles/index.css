@@ -7,14 +7,14 @@
 }
 
 html {
-  background-color: #121212;
+  background-color: #0F0B1A;
 }
 
 body {
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #121212;
+  background-color: #0F0B1A;
   color: #ffffff;
 }
 
@@ -24,7 +24,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: #1A1425;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -33,10 +33,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FC4C02;
+  background: #8B5CF6;
 }
 
 ::selection {
-  background: rgba(252, 76, 2, 0.3);
+  background: rgba(139, 92, 246, 0.3);
   color: #ffffff;
 }

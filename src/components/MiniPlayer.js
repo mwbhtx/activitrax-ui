@@ -30,7 +30,7 @@ const MiniPlayer = () => {
                     borderRadius: '16px 16px 0 0',
                     overflow: 'hidden',
                     backdropFilter: 'blur(20px)',
-                    backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                    backgroundColor: 'rgba(26, 20, 37, 0.95)',
                     borderTop: '1px solid rgba(255, 255, 255, 0.1)',
                     borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRight: '1px solid rgba(255, 255, 255, 0.08)',
@@ -40,7 +40,7 @@ const MiniPlayer = () => {
                 <Box
                     sx={{
                         height: 3,
-                        backgroundColor: 'rgba(255, 138, 101, 0.15)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.15)',
                         position: 'relative',
                     }}
                 >
@@ -48,9 +48,9 @@ const MiniPlayer = () => {
                         sx={{
                             height: '100%',
                             width: `${progress}%`,
-                            backgroundColor: '#FF8A65',
+                            backgroundColor: '#A78BFA',
                             transition: 'width 0.1s linear',
-                            boxShadow: '0 0 8px rgba(255, 138, 101, 0.5)',
+                            boxShadow: '0 0 8px rgba(139, 92, 246, 0.5)',
                         }}
                     />
                 </Box>
@@ -93,11 +93,11 @@ const MiniPlayer = () => {
                         <IconButton
                             onClick={togglePlayPause}
                             sx={{
-                                backgroundColor: '#FF8A65',
-                                color: '#000',
+                                backgroundColor: '#8B5CF6',
+                                color: '#fff',
                                 transition: 'all 0.2s ease',
                                 '&:hover': {
-                                    backgroundColor: '#E64A19',
+                                    backgroundColor: '#7C3AED',
                                     transform: 'scale(1.05)',
                                 },
                             }}

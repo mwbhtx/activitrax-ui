@@ -19,12 +19,15 @@ const LoginButton = () => {
             sx={{
                 py: 1.5,
                 fontSize: '1rem',
-                fontWeight: 500,
+                fontWeight: 600,
                 borderWidth: 2,
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                borderColor: 'rgba(0, 0, 0, 0.3)',
+                color: '#000',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 '&:hover': {
                     borderWidth: 2,
-                    backgroundColor: 'rgba(252, 76, 2, 0.12)',
+                    borderColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
                     transform: 'translateY(-1px)',
                 },
                 '&:active': {

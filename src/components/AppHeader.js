@@ -28,7 +28,7 @@ export default function AppHeader(props) {
             },
             color: '#ffffff',
             '&:hover': {
-                backgroundColor: 'rgba(255, 138, 101, 0.08)',
+                backgroundColor: 'rgba(139, 92, 246, 0.08)',
             },
         },
         drawerNavLinkButtons: {
@@ -39,8 +39,8 @@ export default function AppHeader(props) {
             color: 'rgba(255, 255, 255, 0.9)',
             padding: '12px 16px',
             '&:hover': {
-                backgroundColor: 'rgba(255, 138, 101, 0.12)',
-                color: '#FF8A65',
+                backgroundColor: 'rgba(139, 92, 246, 0.12)',
+                color: '#A78BFA',
             },
             borderRadius: '0px',
             transition: 'all 0.2s ease',
@@ -51,17 +51,17 @@ export default function AppHeader(props) {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: '#1e1e1e',
-            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#1A1425',
+            borderRight: '1px solid rgba(139, 92, 246, 0.15)',
         },
         logoutButton: {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
             "&.MuiButton-contained": {
-                backgroundColor: '#FC4C02',
+                backgroundColor: '#8B5CF6',
                 "&:hover": {
-                    backgroundColor: '#D94000',
+                    backgroundColor: '#7C3AED',
                 },
                 textAlign: "left",
                 borderRadius: "0px",
@@ -107,19 +107,34 @@ export default function AppHeader(props) {
 
     return (
         <>
-
             <Drawer
                 anchor={drawerAnchor}
                 open={drawerAnchorOpenState}
                 onClose={toggleDrawer(false)}
-
             >
                 {drawerList()}
             </Drawer>
-            <AppBar position="sticky">
+            <AppBar
+                position="sticky"
+                elevation={0}
+                sx={{
+                    backgroundColor: 'rgba(26, 20, 37, 0.8)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    borderBottom: '1px solid rgba(139, 92, 246, 0.15)',
+                    '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent)',
+                    },
+                }}
+            >
                 <Toolbar>
-                    <Stack spacing={2} direction="row" component="div">
-
+                    <Stack spacing={2} direction="row" component="div" alignItems="center">
                         {isAuthenticated && (
                             <IconButton
                                 sx={styles.drawerButton}
@@ -135,38 +150,83 @@ export default function AppHeader(props) {
 
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <MuiLink component={RouterLink} to="/" underline="none">
-                                <Button variant="text">
-                                    <Typography variant="h6" color="primary.contrastText">activitrax.app</Typography>
+                                <Button
+                                    variant="text"
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'transparent',
+                                        },
+                                    }}
+                                >
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            fontWeight: 700,
+                                            background: 'linear-gradient(135deg, #ffffff 0%, #C4B5FD 100%)',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            backgroundClip: 'text',
+                                            transition: 'all 0.3s ease',
+                                            '&:hover': {
+                                                background: 'linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 100%)',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor: 'transparent',
+                                                backgroundClip: 'text',
+                                            },
+                                        }}
+                                    >
+                                        activitrax.app
+                                    </Typography>
                                 </Button>
                             </MuiLink>
                         </Box>
-
                     </Stack>
                     <Box sx={{ flexGrow: 1 }} />
                     {isAuthenticated && (
-                        <Stack spacing={2} direction="row" sx={styles.largeNavButtons}>
+                        <Stack spacing={1.5} direction="row" sx={styles.largeNavButtons} alignItems="center">
                             <MuiLink component={RouterLink} to="/dashboard" underline="none">
-                                <Button variant="outlined" color="secondary">Dashboard</Button>
+                                <Button
+                                    variant="text"
+                                    startIcon={<GridViewIcon />}
+                                    sx={{
+                                        color: 'rgba(255, 255, 255, 0.8)',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(139, 92, 246, 0.12)',
+                                            color: '#A78BFA',
+                                        },
+                                    }}
+                                >
+                                    Dashboard
+                                </Button>
                             </MuiLink>
 
                             <MuiLink component={RouterLink} to="/settings" underline="none">
-                                <Button variant="outlined" color="secondary">Settings</Button>
+                                <Button
+                                    variant="text"
+                                    startIcon={<SettingsApplicationsIcon />}
+                                    sx={{
+                                        color: 'rgba(255, 255, 255, 0.8)',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(139, 92, 246, 0.12)',
+                                            color: '#A78BFA',
+                                        },
+                                    }}
+                                >
+                                    Settings
+                                </Button>
                             </MuiLink>
 
-                            {isAuthenticated && (
-                                <>
-                                    <LogoutButton />
-                                </>
-                            )}
-                            {!isAuthenticated && (
-                                <>
-                                    <LoginButton />
-                                    <SignupButton />
-                                </>
-                            )}
+                            <Box sx={{ width: '1px', height: 24, backgroundColor: 'rgba(255, 255, 255, 0.2)', mx: 1 }} />
+
+                            <LogoutButton />
                         </Stack>
                     )}
-
                 </Toolbar>
             </AppBar>
         </>
