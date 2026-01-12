@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Avatar, Box, CircularProgress, Collapse, Container, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import { Alert, Avatar, Box, CircularProgress, Collapse, Container, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -101,6 +101,8 @@ const ServiceConnectDialogue = () => {
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
+    // TODO: Remove test data - temporarily forcing alert to show for styling
+    const [disconnectedServices, setDisconnectedServices] = useState(['spotify', 'strava']);
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
@@ -137,6 +139,11 @@ const ServiceConnectDialogue = () => {
                     setSpotifyConnected(true);
                 }
 
+                // Track any services that were auto-disconnected due to revocation
+                if (userConfig.disconnected_services?.length > 0) {
+                    setDisconnectedServices(userConfig.disconnected_services);
+                }
+
                 // Always fetch activities (user may have historical data even if disconnected)
                 const userActivities = await getUserActivities(accessToken);
                 setActivities(userActivities || []);
@@ -165,6 +172,12 @@ const ServiceConnectDialogue = () => {
 
     return (
         <Container>
+            {/* Alerts for auto-disconnected services - persists until user reconnects */}
+            {disconnectedServices.map(service => (
+                <Alert key={service} severity="error" sx={{ mt: 3, mb: 0 }}>
+                    There was an issue connecting to your {service.charAt(0).toUpperCase() + service.slice(1)} account. Please reconnect to continue syncing.
+                </Alert>
+            ))}
             <ConnectionFlow
                 stravaConnected={stravaConnected}
                 spotifyConnected={spotifyConnected}
