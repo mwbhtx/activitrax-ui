@@ -22,6 +22,7 @@ import AppHeader from "../components/AppHeader";
 import LikeButton from "../components/LikeButton";
 import { getLikedTracks } from "../services/likedTracks";
 import { useAudio } from "../contexts/AudioContext";
+import { useLikedTracks } from "../contexts/LikedTracksContext";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
@@ -101,6 +102,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
 
 export default function LikedTracksPage() {
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+    const { handleLikeChange: updateGlobalLikedState } = useLikedTracks();
     const [tracks, setTracks] = useState([]);
     const [filteredTracks, setFilteredTracks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -139,6 +141,9 @@ export default function LikedTracksPage() {
     };
 
     const handleLikeChange = (spotifyTrackId, isLiked) => {
+        // Update the global liked state so other components stay in sync
+        updateGlobalLikedState(spotifyTrackId, isLiked);
+
         if (!isLiked) {
             // Remove from list when unliked
             setTracks(prev => prev.filter(t => t.spotify_track_id !== spotifyTrackId));

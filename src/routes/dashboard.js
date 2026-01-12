@@ -16,9 +16,10 @@ import { strava_scopes } from "../services/strava";
 import { getUserConfig, getUserActivities, getActivityTracklist, validateConnections } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
+import { useLikedTracks } from "../contexts/LikedTracksContext";
 import ConnectionFlow from "../components/OnboardingHero";
 import LikeButton from "../components/LikeButton";
-import { getLikedTrackIds, getSpotifyTrackId } from "../services/likedTracks";
+import { getSpotifyTrackId } from "../services/likedTracks";
 
 // Activity processing status constants (must match backend)
 const ACTIVITY_STATUS = {
@@ -98,13 +99,13 @@ export default function Dashboard(props) {
 const ServiceConnectDialogue = () => {
 
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+    const { isLiked, handleLikeChange } = useLikedTracks();
 
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
     const [disconnectedServices, setDisconnectedServices] = useState([]);
-    const [likedTrackIds, setLikedTrackIds] = useState(new Set());
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
@@ -120,18 +121,6 @@ const ServiceConnectDialogue = () => {
     spotifyAuthUrl.searchParams.append("show_dialog", "true");
     spotifyAuthUrl.searchParams.append("scope", spotify_scopes);
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_SPOTIFY_REDIRECT_URI);
-
-    const handleLikeChange = (spotifyTrackId, isLiked) => {
-        setLikedTrackIds(prev => {
-            const newSet = new Set(prev);
-            if (isLiked) {
-                newSet.add(spotifyTrackId);
-            } else {
-                newSet.delete(spotifyTrackId);
-            }
-            return newSet;
-        });
-    };
 
     useEffect(() => {
 
@@ -181,19 +170,8 @@ const ServiceConnectDialogue = () => {
             }
         };
 
-        const fetchLikedTrackIds = async () => {
-            try {
-                const api_token = await getAccessTokenSilently();
-                const ids = await getLikedTrackIds(api_token);
-                setLikedTrackIds(new Set(ids));
-            } catch (error) {
-                console.log('Failed to fetch liked tracks:', error);
-            }
-        };
-
         if (isAuthenticated) {
             fetchData();
-            fetchLikedTrackIds();
         }
 
     }, [getAccessTokenSilently, isAuthenticated]);
@@ -220,7 +198,7 @@ const ServiceConnectDialogue = () => {
                 stravaAuthUrl={stravaAuthUrl.toString()}
                 spotifyAuthUrl={spotifyAuthUrl.toString()}
             />
-            {activities.length > 0 && <ActivitiesTable activities={activities} likedTrackIds={likedTrackIds} onLikeChange={handleLikeChange} />}
+            {activities.length > 0 && <ActivitiesTable activities={activities} isLiked={isLiked} onLikeChange={handleLikeChange} />}
         </Container>
     );
 }
@@ -353,7 +331,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
     );
 };
 
-const TrackItem = ({ track, isPlaying, onPlayToggle, likedTrackIds, onLikeChange }) => {
+const TrackItem = ({ track, isPlaying, onPlayToggle, isLiked, onLikeChange }) => {
     const hasPreview = !!track.preview_url;
 
     return (
@@ -364,7 +342,7 @@ const TrackItem = ({ track, isPlaying, onPlayToggle, likedTrackIds, onLikeChange
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <LikeButton
                             track={track}
-                            isLiked={likedTrackIds.has(getSpotifyTrackId(track))}
+                            isLiked={isLiked(getSpotifyTrackId(track))}
                             onLikeChange={onLikeChange}
                         />
                         <Tooltip title="Open in Spotify">
@@ -412,7 +390,7 @@ const TrackItem = ({ track, isPlaying, onPlayToggle, likedTrackIds, onLikeChange
     );
 };
 
-const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading, likedTrackIds, onLikeChange }) => {
+const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading, isLiked, onLikeChange }) => {
     const formatted = formatActivity(activity);
     const hasTracklist = formatted.track_count > 0;
     const { currentTrack, isPlaying, play, playAll, togglePlayPause } = useAudio();
@@ -491,7 +469,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                                                 track={track}
                                                 isPlaying={isTrackPlaying(track)}
                                                 onPlayToggle={() => handlePlayToggle(track)}
-                                                likedTrackIds={likedTrackIds}
+                                                isLiked={isLiked}
                                                 onLikeChange={onLikeChange}
                                             />
                                         ))}
@@ -506,7 +484,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
     );
 };
 
-const ActivitiesTable = ({ activities, likedTrackIds, onLikeChange }) => {
+const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [expandedId, setExpandedId] = useState(null);
     const [tracklists, setTracklists] = useState({});
@@ -571,7 +549,7 @@ const ActivitiesTable = ({ activities, likedTrackIds, onLikeChange }) => {
                                     onExpandClick={() => handleExpandClick(activity.id)}
                                     tracklist={tracklists[activity.id] || []}
                                     isLoading={loadingId === activity.id}
-                                    likedTrackIds={likedTrackIds}
+                                    isLiked={isLiked}
                                     onLikeChange={onLikeChange}
                                 />
                             ))

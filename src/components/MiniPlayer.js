@@ -5,7 +5,9 @@ import PauseIcon from '@mui/icons-material/Pause';
 import CloseIcon from '@mui/icons-material/Close';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useAudio } from '../contexts/AudioContext';
+import { useLikedTracks } from '../contexts/LikedTracksContext';
 import LikeButton from './LikeButton';
+import { getSpotifyTrackId } from '../services/likedTracks';
 
 const MiniPlayer = () => {
     const {
@@ -16,6 +18,7 @@ const MiniPlayer = () => {
         togglePlayPause,
         stop,
     } = useAudio();
+    const { isLiked, handleLikeChange } = useLikedTracks();
 
     if (!isVisible) return null;
 
@@ -119,7 +122,8 @@ const MiniPlayer = () => {
                     {currentTrack && (
                         <LikeButton
                             track={currentTrack}
-                            isLiked={false}
+                            isLiked={isLiked(getSpotifyTrackId(currentTrack))}
+                            onLikeChange={handleLikeChange}
                         />
                     )}
 

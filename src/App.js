@@ -12,6 +12,7 @@ import { SpotifyAuthPage } from './routes/spotify_auth';
 import About from './routes/about';
 import LikedTracksPage from './routes/liked_tracks';
 import { AudioProvider } from './contexts/AudioContext';
+import { LikedTracksProvider } from './contexts/LikedTracksContext';
 import MiniPlayer from './components/MiniPlayer';
 
 export default function App() {
@@ -28,17 +29,19 @@ export default function App() {
 
   return (
     <AudioProvider>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="dashboard" element={<ProtectedRoute component={Dashboard} />} />
-        <Route path="settings" element={<ProtectedRoute component={Settings} />} />
-        <Route path="callback" element={<CallbackPage />} />
-        <Route path="strava_auth" element={<StravaAuthPage />} />
-        <Route path="spotify_auth" element={<SpotifyAuthPage />} />
-        <Route path="liked-tracks" element={<ProtectedRoute component={LikedTracksPage} />} />
-      </Routes>
-      <MiniPlayer />
+      <LikedTracksProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="dashboard" element={<ProtectedRoute component={Dashboard} />} />
+          <Route path="settings" element={<ProtectedRoute component={Settings} />} />
+          <Route path="callback" element={<CallbackPage />} />
+          <Route path="strava_auth" element={<StravaAuthPage />} />
+          <Route path="spotify_auth" element={<SpotifyAuthPage />} />
+          <Route path="liked-tracks" element={<ProtectedRoute component={LikedTracksPage} />} />
+        </Routes>
+        <MiniPlayer />
+      </LikedTracksProvider>
     </AudioProvider>
   );
 }
