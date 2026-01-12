@@ -17,6 +17,7 @@ import { getUserConfig, getUserActivities, getActivityTracklist, validateConnect
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
 import ConnectionFlow from "../components/OnboardingHero";
+import AddToPlaylistButton from "../components/AddToPlaylistButton";
 
 // Activity processing status constants (must match backend)
 const ACTIVITY_STATUS = {
@@ -102,6 +103,7 @@ const ServiceConnectDialogue = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
     const [disconnectedServices, setDisconnectedServices] = useState([]);
+    const [spotifyOAuthAllows, setSpotifyOAuthAllows] = useState([]);
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
@@ -142,6 +144,9 @@ const ServiceConnectDialogue = () => {
                 if (userConfig.disconnected_services?.length > 0) {
                     setDisconnectedServices(userConfig.disconnected_services);
                 }
+
+                // Set Spotify OAuth permissions
+                setSpotifyOAuthAllows(userConfig.spotify_oauth_allows || []);
 
                 // Always fetch activities (user may have historical data even if disconnected)
                 const userActivities = await getUserActivities(accessToken);
@@ -194,7 +199,7 @@ const ServiceConnectDialogue = () => {
                 stravaAuthUrl={stravaAuthUrl.toString()}
                 spotifyAuthUrl={spotifyAuthUrl.toString()}
             />
-            {activities.length > 0 && <ActivitiesTable activities={activities} />}
+            {activities.length > 0 && <ActivitiesTable activities={activities} spotifyOAuthAllows={spotifyOAuthAllows} />}
         </Container>
     );
 }
@@ -327,7 +332,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
     );
 };
 
-const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
+const TrackItem = ({ track, isPlaying, onPlayToggle, spotifyOAuthAllows }) => {
     const hasPreview = !!track.preview_url;
 
     return (
@@ -335,25 +340,28 @@ const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
             sx={{ py: 1, px: 2 }}
             secondaryAction={
                 track.spotify_url && (
-                    <Tooltip title="Open in Spotify">
-                        <IconButton
-                            size="small"
-                            component="a"
-                            href={track.spotify_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            sx={{
-                                color: 'custom.primaryGlow',
-                                '&:hover': {
-                                    color: 'primary.light',
-                                    backgroundColor: 'custom.primarySubtle',
-                                },
-                            }}
-                        >
-                            <OpenInNewIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <AddToPlaylistButton track={track} spotifyOAuthAllows={spotifyOAuthAllows} />
+                        <Tooltip title="Open in Spotify">
+                            <IconButton
+                                size="small"
+                                component="a"
+                                href={track.spotify_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                sx={{
+                                    color: 'custom.primaryGlow',
+                                    '&:hover': {
+                                        color: 'primary.light',
+                                        backgroundColor: 'custom.primarySubtle',
+                                    },
+                                }}
+                            >
+                                <OpenInNewIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                 )
             }
         >
@@ -379,7 +387,7 @@ const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
     );
 };
 
-const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading }) => {
+const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading, spotifyOAuthAllows }) => {
     const formatted = formatActivity(activity);
     const hasTracklist = formatted.track_count > 0;
     const { currentTrack, isPlaying, play, playAll, togglePlayPause } = useAudio();
@@ -458,6 +466,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                                                 track={track}
                                                 isPlaying={isTrackPlaying(track)}
                                                 onPlayToggle={() => handlePlayToggle(track)}
+                                                spotifyOAuthAllows={spotifyOAuthAllows}
                                             />
                                         ))}
                                     </List>
@@ -471,7 +480,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
     );
 };
 
-const ActivitiesTable = ({ activities }) => {
+const ActivitiesTable = ({ activities, spotifyOAuthAllows }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [expandedId, setExpandedId] = useState(null);
     const [tracklists, setTracklists] = useState({});
@@ -536,6 +545,7 @@ const ActivitiesTable = ({ activities }) => {
                                     onExpandClick={() => handleExpandClick(activity.id)}
                                     tracklist={tracklists[activity.id] || []}
                                     isLoading={loadingId === activity.id}
+                                    spotifyOAuthAllows={spotifyOAuthAllows}
                                 />
                             ))
                         ) : (
