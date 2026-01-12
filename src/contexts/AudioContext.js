@@ -16,6 +16,8 @@ export const AudioProvider = ({ children }) => {
     const [progress, setProgress] = useState(0);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [queue, setQueue] = useState([]);
+    const [queueIndex, setQueueIndex] = useState(-1);
     const audioRef = useRef(null);
     const progressIntervalRef = useRef(null);
 
@@ -42,7 +44,7 @@ export const AudioProvider = ({ children }) => {
         }, 100);
     }, [stopProgressTracking]);
 
-    const play = useCallback((track) => {
+    const playTrackInternal = useCallback((track, onEnded) => {
         // Stop current audio if any
         if (audioRef.current) {
             audioRef.current.pause();
@@ -50,7 +52,10 @@ export const AudioProvider = ({ children }) => {
         }
         stopProgressTracking();
 
-        if (!track?.preview_url) return;
+        if (!track?.preview_url) {
+            onEnded?.();
+            return;
+        }
 
         // Create and play new audio
         const audio = new Audio(track.preview_url);
@@ -60,19 +65,13 @@ export const AudioProvider = ({ children }) => {
             setIsPlaying(false);
             setProgress(100);
             stopProgressTracking();
-            // Hide player after preview ends
-            setTimeout(() => {
-                setIsVisible(false);
-                setCurrentTrack(null);
-                setProgress(0);
-            }, 2000);
+            onEnded?.();
         };
 
         audio.onerror = () => {
             setIsPlaying(false);
-            setIsVisible(false);
-            setCurrentTrack(null);
             stopProgressTracking();
+            onEnded?.();
         };
 
         audio.play();
@@ -83,6 +82,63 @@ export const AudioProvider = ({ children }) => {
         setProgress(0);
         startProgressTracking();
     }, [startProgressTracking, stopProgressTracking]);
+
+    const playNextInQueue = useCallback(() => {
+        setQueueIndex(prevIndex => {
+            const nextIndex = prevIndex + 1;
+            setQueue(currentQueue => {
+                if (nextIndex < currentQueue.length) {
+                    const nextTrack = currentQueue[nextIndex];
+                    // Find next track with preview_url
+                    let trackToPlay = nextTrack;
+                    let searchIndex = nextIndex;
+                    while (!trackToPlay?.preview_url && searchIndex < currentQueue.length - 1) {
+                        searchIndex++;
+                        trackToPlay = currentQueue[searchIndex];
+                    }
+                    if (trackToPlay?.preview_url) {
+                        playTrackInternal(trackToPlay, () => playNextInQueue());
+                        return currentQueue;
+                    }
+                }
+                // Queue finished
+                setTimeout(() => {
+                    setIsVisible(false);
+                    setCurrentTrack(null);
+                    setProgress(0);
+                    setQueue([]);
+                    setQueueIndex(-1);
+                }, 2000);
+                return currentQueue;
+            });
+            return nextIndex;
+        });
+    }, [playTrackInternal]);
+
+    const play = useCallback((track) => {
+        // Clear queue when playing single track
+        setQueue([]);
+        setQueueIndex(-1);
+        playTrackInternal(track, () => {
+            // Hide player after preview ends
+            setTimeout(() => {
+                setIsVisible(false);
+                setCurrentTrack(null);
+                setProgress(0);
+            }, 2000);
+        });
+    }, [playTrackInternal]);
+
+    const playAll = useCallback((tracks) => {
+        if (!tracks || tracks.length === 0) return;
+        // Filter to only tracks with preview URLs
+        const playableTracks = tracks.filter(t => t.preview_url);
+        if (playableTracks.length === 0) return;
+
+        setQueue(playableTracks);
+        setQueueIndex(0);
+        playTrackInternal(playableTracks[0], () => playNextInQueue());
+    }, [playTrackInternal, playNextInQueue]);
 
     const pause = useCallback(() => {
         if (audioRef.current) {
@@ -135,7 +191,10 @@ export const AudioProvider = ({ children }) => {
         progress,
         isMinimized,
         isVisible,
+        queue,
+        queueIndex,
         play,
+        playAll,
         pause,
         resume,
         togglePlayPause,

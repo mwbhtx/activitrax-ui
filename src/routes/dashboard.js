@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Alert, Avatar, Box, CircularProgress, Collapse, Container, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, CircularProgress, Collapse, Container, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -382,7 +382,7 @@ const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
 const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading }) => {
     const formatted = formatActivity(activity);
     const hasTracklist = formatted.track_count > 0;
-    const { currentTrack, isPlaying, play, togglePlayPause } = useAudio();
+    const { currentTrack, isPlaying, play, playAll, togglePlayPause } = useAudio();
 
     const handlePlayToggle = (track) => {
         // Check if this track is currently playing
@@ -431,9 +431,21 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                         <Collapse in={isExpanded} timeout={300} unmountOnExit>
                             <Box sx={{ py: 2, px: 4, minHeight: 100 }}>
-                                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
-                                    Tracklist
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                        Tracklist
+                                    </Typography>
+                                    {!isLoading && tracklist.length > 0 && tracklist.some(t => t.preview_url) && (
+                                        <Button
+                                            size="small"
+                                            startIcon={<PlayArrowIcon />}
+                                            onClick={(e) => { e.stopPropagation(); playAll(tracklist); }}
+                                            sx={{ textTransform: 'none' }}
+                                        >
+                                            Play All
+                                        </Button>
+                                    )}
+                                </Box>
                                 {isLoading || tracklist.length === 0 ? (
                                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 60 }}>
                                         <CircularProgress size={24} sx={{ color: 'primary.main' }} />
