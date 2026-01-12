@@ -6,6 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
 import { useState } from "react";
 import GridViewIcon from '@mui/icons-material/GridView';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
@@ -79,6 +80,11 @@ export default function AppHeader(props) {
                 <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/dashboard" onClick={toggleDrawer(false)}>
                     <GridViewIcon sx={{ m: 1 }} />
                     <Typography>Dashboard</Typography>
+                </Button>
+                {/* Navigation Link To Liked Tracks */}
+                <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/liked-tracks" onClick={toggleDrawer(false)}>
+                    <FavoriteIcon sx={{ m: 1 }} />
+                    <Typography>Liked Tracks</Typography>
                 </Button>
                 {/* Navigation Link To Settings with Gear Icon */}
                 <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/settings" onClick={toggleDrawer(false)}>
@@ -207,6 +213,25 @@ export default function AppHeader(props) {
                                     }}
                                 >
                                     Dashboard
+                                </Button>
+                            </MuiLink>
+
+                            <MuiLink component={RouterLink} to="/liked-tracks" underline="none">
+                                <Button
+                                    variant="text"
+                                    startIcon={<FavoriteIcon />}
+                                    sx={{
+                                        color: 'text.highlight',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        '&:hover': {
+                                            backgroundColor: 'action.focus',
+                                            color: 'primary.light',
+                                        },
+                                    }}
+                                >
+                                    Liked Tracks
                                 </Button>
                             </MuiLink>
 

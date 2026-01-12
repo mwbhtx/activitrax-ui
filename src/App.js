@@ -10,6 +10,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { StravaAuthPage } from './routes/strava_auth';
 import { SpotifyAuthPage } from './routes/spotify_auth';
 import About from './routes/about';
+import LikedTracksPage from './routes/liked_tracks';
 import { AudioProvider } from './contexts/AudioContext';
 import MiniPlayer from './components/MiniPlayer';
 
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="callback" element={<CallbackPage />} />
         <Route path="strava_auth" element={<StravaAuthPage />} />
         <Route path="spotify_auth" element={<SpotifyAuthPage />} />
+        <Route path="liked-tracks" element={<ProtectedRoute component={LikedTracksPage} />} />
       </Routes>
       <MiniPlayer />
     </AudioProvider>

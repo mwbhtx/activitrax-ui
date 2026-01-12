@@ -123,16 +123,6 @@ const ServiceConnectDialogue = () => {
     spotifyAuthUrl.searchParams.append("scope", spotify_scopes);
     spotifyAuthUrl.searchParams.append("redirect_uri", process.env.REACT_APP_SPOTIFY_REDIRECT_URI);
 
-    const fetchLikedTrackIds = async () => {
-        try {
-            const api_token = await getAccessTokenSilently();
-            const ids = await getLikedTrackIds(api_token);
-            setLikedTrackIds(new Set(ids));
-        } catch (error) {
-            console.log('Failed to fetch liked tracks:', error);
-        }
-    };
-
     const handleLikeChange = (spotifyTrackId, isLiked) => {
         setLikedTrackIds(prev => {
             const newSet = new Set(prev);
@@ -193,6 +183,16 @@ const ServiceConnectDialogue = () => {
 
             } catch (e) {
                 console.log(e.message);
+            }
+        };
+
+        const fetchLikedTrackIds = async () => {
+            try {
+                const api_token = await getAccessTokenSilently();
+                const ids = await getLikedTrackIds(api_token);
+                setLikedTrackIds(new Set(ids));
+            } catch (error) {
+                console.log('Failed to fetch liked tracks:', error);
             }
         };
 
