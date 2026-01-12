@@ -44,7 +44,7 @@ export const StravaAuthPage = () => {
 
                 // exchange auth code for access token and register strava account with user
                 const api_token = await getAccessTokenSilently();
-                await exchangeStravaAuthToken(api_token, auth_code);
+                await exchangeStravaAuthToken(api_token, auth_code, scope);
                 success = true;
 
             }

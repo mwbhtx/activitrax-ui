@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const exchangeStravaAuthToken = async (api_token, auth_token) => {
+export const exchangeStravaAuthToken = async (api_token, auth_token, scopes) => {
     // Exchange strava auth token for access token
     const reqConfig = {
         method: "POST",
@@ -11,6 +11,7 @@ export const exchangeStravaAuthToken = async (api_token, auth_token) => {
         url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/strava/exchange_token",
         data: {
             auth_token: auth_token,
+            scopes: scopes
         }
     }
 
