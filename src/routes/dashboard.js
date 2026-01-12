@@ -208,10 +208,10 @@ const formatActivity = (activity) => {
 
     if (activity.start_date_local) {
         const date = new Date(activity.start_date_local);
-        // Format: DD/MM/YYYY
-        dateFormatted = date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
+        // Format: Mon DD, YYYY
+        dateFormatted = date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
             year: 'numeric'
         });
         // Format: h:mm AM/PM
