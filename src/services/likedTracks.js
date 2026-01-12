@@ -22,6 +22,7 @@ export const likeTrack = async (api_token, track) => {
                 album: track.album,
                 album_image: track.album_image,
                 spotify_url: track.spotify_url,
+                preview_url: track.preview_url,
                 duration_ms: track.duration
             }
         }

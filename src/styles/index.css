@@ -29,7 +29,10 @@
 
 html {
   background-color: var(--color-background-default);
-  overflow-y: scroll;
+}
+
+html, body {
+  overscroll-behavior: none;
 }
 
 body {
@@ -38,6 +41,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background-default);
   color: var(--color-text-primary);
+  min-height: 100%;
+  min-height: 100dvh;
 }
 
 ::-webkit-scrollbar {

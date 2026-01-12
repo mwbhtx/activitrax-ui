@@ -3,7 +3,6 @@ import {
     Box,
     CircularProgress,
     Container,
-    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -12,7 +11,8 @@ import {
     Typography,
     Tooltip,
     TextField,
-    InputAdornment
+    InputAdornment,
+    IconButton
 } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SearchIcon from '@mui/icons-material/Search';
@@ -24,6 +24,80 @@ import { getLikedTracks } from "../services/likedTracks";
 import { useAudio } from "../contexts/AudioContext";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+
+const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
+    const { progress } = useAudio();
+
+    if (!hasPreview) {
+        return <Box sx={{ width: 36, height: 36, mr: 1.5 }} />;
+    }
+
+    return (
+        <Tooltip title={isPlaying ? "Pause preview" : "Play 30s preview"}>
+            <Box
+                onClick={(e) => { e.stopPropagation(); onPlayToggle(); }}
+                sx={{
+                    position: 'relative',
+                    width: 36,
+                    height: 36,
+                    mr: 1.5,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                {/* Background circle */}
+                <CircularProgress
+                    variant="determinate"
+                    value={100}
+                    size={36}
+                    thickness={3}
+                    sx={{
+                        position: 'absolute',
+                        color: isPlaying ? 'custom.progressBg' : 'custom.progressBgDim',
+                    }}
+                />
+                {/* Progress circle */}
+                {isPlaying && (
+                    <CircularProgress
+                        variant="determinate"
+                        value={progress}
+                        size={36}
+                        thickness={3}
+                        sx={{
+                            position: 'absolute',
+                            color: 'primary.light',
+                            transition: 'none',
+                        }}
+                    />
+                )}
+                {/* Play/Pause icon */}
+                <Box
+                    sx={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        backgroundColor: 'primary.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.15s ease',
+                        '&:hover': {
+                            transform: 'scale(1.1)',
+                        },
+                    }}
+                >
+                    {isPlaying ? (
+                        <PauseIcon sx={{ color: 'text.primary', fontSize: 18 }} />
+                    ) : (
+                        <PlayArrowIcon sx={{ color: 'text.primary', fontSize: 18, ml: '2px' }} />
+                    )}
+                </Box>
+            </Box>
+        </Tooltip>
+    );
+};
 
 export default function LikedTracksPage() {
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
@@ -178,17 +252,11 @@ export default function LikedTracksPage() {
                                         </Box>
                                     }
                                 >
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handlePlayToggle(track)}
-                                        sx={{ mr: 1 }}
-                                    >
-                                        {isTrackPlaying(track) ? (
-                                            <PauseIcon fontSize="small" />
-                                        ) : (
-                                            <PlayArrowIcon fontSize="small" />
-                                        )}
-                                    </IconButton>
+                                    <PlayButton
+                                        isPlaying={isTrackPlaying(track)}
+                                        onPlayToggle={() => handlePlayToggle(track)}
+                                        hasPreview={!!track.preview_url}
+                                    />
                                     <ListItemAvatar>
                                         <Avatar
                                             variant="rounded"
