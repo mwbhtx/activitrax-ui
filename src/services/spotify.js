@@ -54,8 +54,9 @@ export const addTrackToPlaylist = async (api_token, playlistId, trackUri) => {
 // Base scopes (existing functionality)
 export const spotify_scopes_base = 'user-read-recently-played user-read-email user-read-private'
 
-// Full scopes including playlist modification
-export const spotify_scopes_with_playlists = 'user-read-recently-played user-read-email user-read-private playlist-modify-public playlist-modify-private'
+// Full scopes including playlist read and modification
+export const spotify_scopes_with_playlists = 'user-read-recently-played user-read-email user-read-private playlist-read-private playlist-modify-public playlist-modify-private'
 
-// Default scopes to request (now includes playlist permissions)
-export const spotify_scopes = spotify_scopes_with_playlists
+// Default scopes to request
+// NOTE: playlist scopes require Spotify Developer approval - using base scopes until approved
+export const spotify_scopes = spotify_scopes_base

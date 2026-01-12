@@ -20,10 +20,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useEffect, useState } from "react";
 import AppHeader from "../components/AppHeader";
 import LikeButton from "../components/LikeButton";
-import AddToPlaylistButton from "../components/AddToPlaylistButton";
 import { getLikedTracks } from "../services/likedTracks";
-import { getUserConfig } from "../services/auth0";
-import { spotify_scopes_with_playlists } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -34,7 +31,6 @@ export default function LikedTracksPage() {
     const [filteredTracks, setFilteredTracks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [userConfig, setUserConfig] = useState(null);
     const { currentTrack, isPlaying, play, togglePlayPause } = useAudio();
 
     useEffect(() => {
@@ -43,13 +39,9 @@ export default function LikedTracksPage() {
 
             try {
                 const api_token = await getAccessTokenSilently();
-                const [likedTracks, config] = await Promise.all([
-                    getLikedTracks(api_token),
-                    getUserConfig(api_token)
-                ]);
+                const likedTracks = await getLikedTracks(api_token);
                 setTracks(likedTracks);
                 setFilteredTracks(likedTracks);
-                setUserConfig(config);
             } catch (error) {
                 console.error('Failed to fetch data:', error);
             } finally {
@@ -103,11 +95,6 @@ export default function LikedTracksPage() {
             day: 'numeric',
             year: 'numeric'
         });
-    };
-
-    const handleReauthRequired = () => {
-        // Redirect to Spotify auth with playlist scopes
-        window.location.href = `/spotify_auth?scopes=${encodeURIComponent(spotify_scopes_with_playlists)}`;
     };
 
     return (
@@ -168,13 +155,6 @@ export default function LikedTracksPage() {
                                                 isLiked={true}
                                                 onLikeChange={handleLikeChange}
                                             />
-                                            {track.spotify_url && userConfig && (
-                                                <AddToPlaylistButton
-                                                    track={track}
-                                                    spotifyOAuthAllows={userConfig.spotify_oauth_allows || []}
-                                                    onReauthRequired={handleReauthRequired}
-                                                />
-                                            )}
                                             {track.spotify_url && (
                                                 <Tooltip title="Open in Spotify">
                                                     <IconButton

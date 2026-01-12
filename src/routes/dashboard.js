@@ -17,7 +17,6 @@ import { getUserConfig, getUserActivities, getActivityTracklist, validateConnect
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
 import ConnectionFlow from "../components/OnboardingHero";
-import AddToPlaylistButton from "../components/AddToPlaylistButton";
 import LikeButton from "../components/LikeButton";
 import { getLikedTrackIds, getSpotifyTrackId } from "../services/likedTracks";
 
@@ -105,7 +104,6 @@ const ServiceConnectDialogue = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
     const [disconnectedServices, setDisconnectedServices] = useState([]);
-    const [spotifyOAuthAllows, setSpotifyOAuthAllows] = useState([]);
     const [likedTrackIds, setLikedTrackIds] = useState(new Set());
 
     // Build OAuth URLs
@@ -159,9 +157,6 @@ const ServiceConnectDialogue = () => {
                 if (userConfig.disconnected_services?.length > 0) {
                     setDisconnectedServices(userConfig.disconnected_services);
                 }
-
-                // Set Spotify OAuth permissions
-                setSpotifyOAuthAllows(userConfig.spotify_oauth_allows || []);
 
                 // Always fetch activities (user may have historical data even if disconnected)
                 const userActivities = await getUserActivities(accessToken);
@@ -225,7 +220,7 @@ const ServiceConnectDialogue = () => {
                 stravaAuthUrl={stravaAuthUrl.toString()}
                 spotifyAuthUrl={spotifyAuthUrl.toString()}
             />
-            {activities.length > 0 && <ActivitiesTable activities={activities} spotifyOAuthAllows={spotifyOAuthAllows} likedTrackIds={likedTrackIds} onLikeChange={handleLikeChange} />}
+            {activities.length > 0 && <ActivitiesTable activities={activities} likedTrackIds={likedTrackIds} onLikeChange={handleLikeChange} />}
         </Container>
     );
 }
@@ -358,7 +353,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
     );
 };
 
-const TrackItem = ({ track, isPlaying, onPlayToggle, spotifyOAuthAllows, likedTrackIds, onLikeChange }) => {
+const TrackItem = ({ track, isPlaying, onPlayToggle, likedTrackIds, onLikeChange }) => {
     const hasPreview = !!track.preview_url;
 
     return (
@@ -370,11 +365,6 @@ const TrackItem = ({ track, isPlaying, onPlayToggle, spotifyOAuthAllows, likedTr
                         <LikeButton
                             track={track}
                             isLiked={likedTrackIds.has(getSpotifyTrackId(track))}
-                            onLikeChange={onLikeChange}
-                        />
-                        <AddToPlaylistButton
-                            track={track}
-                            spotifyOAuthAllows={spotifyOAuthAllows}
                             onLikeChange={onLikeChange}
                         />
                         <Tooltip title="Open in Spotify">
@@ -422,7 +412,7 @@ const TrackItem = ({ track, isPlaying, onPlayToggle, spotifyOAuthAllows, likedTr
     );
 };
 
-const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading, spotifyOAuthAllows, likedTrackIds, onLikeChange }) => {
+const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading, likedTrackIds, onLikeChange }) => {
     const formatted = formatActivity(activity);
     const hasTracklist = formatted.track_count > 0;
     const { currentTrack, isPlaying, play, playAll, togglePlayPause } = useAudio();
@@ -501,7 +491,6 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                                                 track={track}
                                                 isPlaying={isTrackPlaying(track)}
                                                 onPlayToggle={() => handlePlayToggle(track)}
-                                                spotifyOAuthAllows={spotifyOAuthAllows}
                                                 likedTrackIds={likedTrackIds}
                                                 onLikeChange={onLikeChange}
                                             />
@@ -517,7 +506,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
     );
 };
 
-const ActivitiesTable = ({ activities, spotifyOAuthAllows, likedTrackIds, onLikeChange }) => {
+const ActivitiesTable = ({ activities, likedTrackIds, onLikeChange }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [expandedId, setExpandedId] = useState(null);
     const [tracklists, setTracklists] = useState({});
@@ -582,7 +571,6 @@ const ActivitiesTable = ({ activities, spotifyOAuthAllows, likedTrackIds, onLike
                                     onExpandClick={() => handleExpandClick(activity.id)}
                                     tracklist={tracklists[activity.id] || []}
                                     isLoading={loadingId === activity.id}
-                                    spotifyOAuthAllows={spotifyOAuthAllows}
                                     likedTrackIds={likedTrackIds}
                                     onLikeChange={onLikeChange}
                                 />
