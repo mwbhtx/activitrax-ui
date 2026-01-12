@@ -19,8 +19,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getSpotifyPlaylists, addTrackToPlaylist, spotify_scopes_with_playlists } from '../services/spotify';
+import { likeTrack } from '../services/likedTracks';
 
-const AddToPlaylistButton = ({ track, spotifyOAuthAllows = [], onReauthRequired }) => {
+const AddToPlaylistButton = ({ track, spotifyOAuthAllows = [], onReauthRequired, onLikeChange }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [anchorEl, setAnchorEl] = useState(null);
     const [playlists, setPlaylists] = useState([]);
@@ -90,6 +91,18 @@ const AddToPlaylistButton = ({ track, spotifyOAuthAllows = [], onReauthRequired 
             const api_token = await getAccessTokenSilently();
             await addTrackToPlaylist(api_token, playlistId, trackUri);
             setAddedTo(prev => new Set([...prev, playlistId]));
+
+            // Auto-like the track when adding to playlist
+            try {
+                await likeTrack(api_token, track);
+                if (onLikeChange) {
+                    const trackId = track.spotify_url?.split('/track/')[1]?.split('?')[0];
+                    onLikeChange(trackId, true);
+                }
+            } catch (likeErr) {
+                // Don't fail the whole operation if like fails
+                console.error('Failed to auto-like track:', likeErr);
+            }
         } catch (err) {
             console.error('Failed to add track:', err);
             setError('Failed to add track');

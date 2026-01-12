@@ -372,7 +372,11 @@ const TrackItem = ({ track, isPlaying, onPlayToggle, spotifyOAuthAllows, likedTr
                             isLiked={likedTrackIds.has(getSpotifyTrackId(track))}
                             onLikeChange={onLikeChange}
                         />
-                        <AddToPlaylistButton track={track} spotifyOAuthAllows={spotifyOAuthAllows} />
+                        <AddToPlaylistButton
+                            track={track}
+                            spotifyOAuthAllows={spotifyOAuthAllows}
+                            onLikeChange={onLikeChange}
+                        />
                         <Tooltip title="Open in Spotify">
                             <IconButton
                                 size="small"
