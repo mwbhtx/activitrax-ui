@@ -101,8 +101,7 @@ const ServiceConnectDialogue = () => {
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
-    // TODO: Remove test data - temporarily forcing alert to show for styling
-    const [disconnectedServices, setDisconnectedServices] = useState(['spotify', 'strava']);
+    const [disconnectedServices, setDisconnectedServices] = useState([]);
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
