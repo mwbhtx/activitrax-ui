@@ -23,11 +23,13 @@ export const StravaAuthPage = () => {
 
         const exchangeAuthToken = async (auth_code) => {
 
+            let success = false;
+
             try {
 
                 if (error) {
                     if (error === 'access_denied') {
-                        throw new Error(`user denied access to spotify`)
+                        throw new Error(`user denied access to strava`)
                     }
                 }
 
@@ -43,13 +45,19 @@ export const StravaAuthPage = () => {
                 // exchange auth code for access token and register strava account with user
                 const api_token = await getAccessTokenSilently();
                 await exchangeStravaAuthToken(api_token, auth_code);
+                success = true;
 
             }
             catch (e) {
                 console.log(e)
             }
 
-            navigate('/dashboard');
+            // Only pass strava_connected param if exchange succeeded
+            if (success) {
+                navigate('/dashboard?strava_connected=true');
+            } else {
+                navigate('/dashboard');
+            }
 
         }
 
