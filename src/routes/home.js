@@ -28,6 +28,13 @@ export default function Home() {
 }
 
 const HomeComponent = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    if (isMobile) {
+        return <MobileHome />;
+    }
+
     return (
         <Grid2
             container
@@ -47,6 +54,116 @@ const HomeComponent = () => {
                 <AuthDialog />
             </Grid2>
         </Grid2>
+    );
+};
+
+const MobileHome = () => {
+    return (
+        <Box
+            sx={{
+                minHeight: '100vh',
+                backgroundColor: '#0F0B1A',
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
+            {/* Ambient glow top */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: '-20%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '500px',
+                    height: '500px',
+                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)',
+                    filter: 'blur(80px)',
+                    pointerEvents: 'none',
+                }}
+            />
+
+            {/* Content */}
+            <Box
+                sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    px: 4,
+                    py: 4,
+                    position: 'relative',
+                    zIndex: 1,
+                }}
+            >
+                {/* Logo with gradient using mask */}
+                <Box
+                    sx={{
+                        width: '90%',
+                        maxWidth: 320,
+                        height: 200,
+                        mb: 3,
+                        background: 'linear-gradient(135deg, #ffffff 0%, #A78BFA 50%, #8B5CF6 100%)',
+                        WebkitMask: `url(${ActivitraxLogo}) center/contain no-repeat`,
+                        mask: `url(${ActivitraxLogo}) center/contain no-repeat`,
+                    }}
+                />
+
+                {/* Headline */}
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: 700,
+                        textAlign: 'center',
+                        mb: 2,
+                        background: 'linear-gradient(135deg, #ffffff 0%, #A78BFA 50%, #8B5CF6 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        letterSpacing: '-0.02em',
+                    }}
+                >
+                    Your Music. Your Workouts.
+                </Typography>
+
+                {/* Tagline */}
+                <Typography
+                    variant="body1"
+                    sx={{
+                        color: '#ebd7ff',
+                        textAlign: 'center',
+                        mb: 6,
+                        maxWidth: 320,
+                        lineHeight: 1.6,
+                    }}
+                >
+                    Connect Strava and Spotify to see what music powered every run, ride, and workout.
+                </Typography>
+
+                {/* Buttons */}
+                <Stack spacing={2} sx={{ width: '100%', maxWidth: 300 }}>
+                    <SignupButton />
+                    <LoginButton />
+                </Stack>
+            </Box>
+
+            {/* Bottom ambient glow */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    bottom: '-30%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '600px',
+                    height: '400px',
+                    background: 'radial-gradient(ellipse, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                    filter: 'blur(60px)',
+                    pointerEvents: 'none',
+                }}
+            />
+        </Box>
     );
 };
 

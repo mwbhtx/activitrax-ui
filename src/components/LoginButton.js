@@ -21,13 +21,13 @@ const LoginButton = () => {
                 fontSize: '1rem',
                 fontWeight: 600,
                 borderWidth: 2,
-                borderColor: 'custom.overlay',
-                color: 'secondary.contrastText',
-                backgroundColor: 'custom.borderLight',
+                borderColor: { xs: 'rgba(139, 92, 246, 0.5)', sm: 'custom.overlay' },
+                color: { xs: '#ffffff', sm: 'secondary.contrastText' },
+                backgroundColor: { xs: 'rgba(139, 92, 246, 0.1)', sm: 'custom.borderLight' },
                 '&:hover': {
                     borderWidth: 2,
-                    borderColor: 'custom.overlayDark',
-                    backgroundColor: 'custom.glassBg',
+                    borderColor: { xs: 'rgba(139, 92, 246, 0.8)', sm: 'custom.overlayDark' },
+                    backgroundColor: { xs: 'rgba(139, 92, 246, 0.2)', sm: 'custom.glassBg' },
                     transform: 'translateY(-1px)',
                 },
                 '&:active': {

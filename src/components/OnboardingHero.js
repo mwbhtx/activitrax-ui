@@ -203,7 +203,7 @@ const ConnectionFlow = ({
                 >
                     Connect Your Accounts
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1, maxWidth: 400, mx: 'auto', position: 'relative', zIndex: 1 }}>
+                <Typography variant="body2" sx={{ mb: 1, maxWidth: 400, mx: 'auto', position: 'relative', zIndex: 1, color: '#ebd7ff' }}>
                     Link Strava and Spotify to automatically match your listening history with every activity.
                 </Typography>
 

@@ -45,7 +45,7 @@ export default function AppHeader(props) {
         },
         drawerContainer: {
             width: '220px',
-            height: '100%',
+            minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -110,6 +110,7 @@ export default function AppHeader(props) {
                 anchor={drawerAnchor}
                 open={drawerAnchorOpenState}
                 onClose={toggleDrawer(false)}
+                disableScrollLock
             >
                 {drawerList()}
             </Drawer>
