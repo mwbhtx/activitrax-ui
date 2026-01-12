@@ -44,7 +44,7 @@ const SettingsContent = () => {
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
-    stravaAuthUrl.searchParams.append("client_id", '75032');
+    stravaAuthUrl.searchParams.append("client_id", process.env.REACT_APP_STRAVA_CLIENT_ID);
     stravaAuthUrl.searchParams.append("response_type", "code");
     stravaAuthUrl.searchParams.append("approval_prompt", "force");
     stravaAuthUrl.searchParams.append("scope", strava_scopes);
