@@ -96,7 +96,7 @@ function AuthDialog() {
                             px: { xs: 1, sm: 0 },
                         }}
                     >
-                        Synchronize your Strava activities with your favorite music streaming service.
+                        Discover the soundtrack to your runs, rides, and workouts. Connect Strava and Spotify to see what music powered every activity.
                     </Typography>
                 </Stack>
                 <Stack spacing={2}>
