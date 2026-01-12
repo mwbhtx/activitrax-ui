@@ -117,19 +117,19 @@ export default function AppHeader(props) {
                 position="sticky"
                 elevation={0}
                 sx={{
-                    backgroundColor: 'custom.appBarBg',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    borderBottom: '1px solid',
-                    borderBottomColor: 'divider',
+                    backgroundColor: 'rgba(15, 11, 26, 0.9)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
+                    borderBottom: '1px solid rgba(139, 92, 246, 0.15)',
+                    // Bottom glow line
                     '&::after': {
                         content: '""',
                         position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
+                        bottom: -1,
+                        left: '20%',
+                        right: '20%',
                         height: '1px',
-                        background: (theme) => `linear-gradient(90deg, transparent, ${theme.palette.custom.primaryGlow}, transparent)`,
+                        background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent)',
                     },
                 }}
             >

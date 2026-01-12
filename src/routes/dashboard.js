@@ -6,7 +6,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import AppHeader from "../components/AppHeader";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -14,11 +13,10 @@ import WarningIcon from '@mui/icons-material/Warning';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 import { strava_scopes } from "../services/strava";
-import { getUserConfig, getUserActivities, getActivityTracklist, updateUserConfig } from "../services/auth0";
+import { getUserConfig, getUserActivities, getActivityTracklist } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
-import { StravaConnectHero, TracklistPreferenceHero } from "../components/OnboardingHero";
-import SpotifyBanner, { getInitialMinimizedState } from "../components/SpotifyBanner";
+import ConnectionFlow from "../components/OnboardingHero";
 
 // Activity processing status constants (must match backend)
 const ACTIVITY_STATUS = {
@@ -95,28 +93,14 @@ export default function Dashboard(props) {
     )
 }
 
-// Onboarding steps
-const ONBOARDING_STEP = {
-    CONNECT_STRAVA: 1,
-    TRACKLIST_PREFERENCE: 2,
-    COMPLETE: 3
-};
-
 const ServiceConnectDialogue = () => {
 
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-    const [searchParams, setSearchParams] = useSearchParams();
 
     const [stravaConnected, setStravaConnected] = useState(false);
     const [spotifyConnected, setSpotifyConnected] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [activities, setActivities] = useState([]);
-    const [onboardingStep, setOnboardingStep] = useState(ONBOARDING_STEP.CONNECT_STRAVA);
-    const [tracklistEnabled, setTracklistEnabled] = useState(true);
-    const [bannerMinimized, setBannerMinimized] = useState(getInitialMinimizedState);
-
-    // Check if user just connected Strava (coming from OAuth redirect)
-    const justConnectedStrava = searchParams.get('strava_connected') === 'true';
 
     // Build OAuth URLs
     const stravaAuthUrl = new URL('https://www.strava.com/oauth/authorize');
@@ -146,15 +130,6 @@ const ServiceConnectDialogue = () => {
                 // if user has strava connection
                 if (userConfig.strava) {
                     setStravaConnected(true);
-                    // If just connected Strava, show tracklist preference step
-                    // Otherwise skip to complete (returning user)
-                    if (justConnectedStrava) {
-                        setOnboardingStep(ONBOARDING_STEP.TRACKLIST_PREFERENCE);
-                        // Clear the query param so refresh doesn't show the step again
-                        setSearchParams({}, { replace: true });
-                    } else {
-                        setOnboardingStep(ONBOARDING_STEP.COMPLETE);
-                    }
                 }
 
                 // if user has spotify connection
@@ -162,14 +137,9 @@ const ServiceConnectDialogue = () => {
                     setSpotifyConnected(true);
                 }
 
-                // Load tracklist preference
-                setTracklistEnabled(userConfig.strava_description_enabled !== false);
-
-                // if strava connected, fetch activities
-                if (userConfig.strava) {
-                    const userActivities = await getUserActivities(accessToken);
-                    setActivities(userActivities || []);
-                }
+                // Always fetch activities (user may have historical data even if disconnected)
+                const userActivities = await getUserActivities(accessToken);
+                setActivities(userActivities || []);
 
                 // finally
                 setDataLoaded(true);
@@ -183,21 +153,7 @@ const ServiceConnectDialogue = () => {
             fetchData();
         }
 
-    }, [getAccessTokenSilently, isAuthenticated, justConnectedStrava, setSearchParams]);
-
-    const handleTracklistToggle = (event) => {
-        setTracklistEnabled(event.target.checked);
-    };
-
-    const handleContinue = async () => {
-        try {
-            const accessToken = await getAccessTokenSilently();
-            await updateUserConfig(accessToken, { strava_description_enabled: tracklistEnabled });
-            setOnboardingStep(ONBOARDING_STEP.COMPLETE);
-        } catch (e) {
-            console.log(e.message);
-        }
-    };
+    }, [getAccessTokenSilently, isAuthenticated]);
 
     if (!dataLoaded) {
         return (
@@ -207,35 +163,15 @@ const ServiceConnectDialogue = () => {
         )
     }
 
-    // State 1: No Strava - show onboarding flow
-    if (!stravaConnected) {
-        return (
-            <>
-                {onboardingStep === ONBOARDING_STEP.CONNECT_STRAVA && (
-                    <StravaConnectHero stravaAuthUrl={stravaAuthUrl.toString()} />
-                )}
-                {onboardingStep === ONBOARDING_STEP.TRACKLIST_PREFERENCE && (
-                    <TracklistPreferenceHero
-                        enabled={tracklistEnabled}
-                        onToggle={handleTracklistToggle}
-                        onContinue={handleContinue}
-                    />
-                )}
-            </>
-        );
-    }
-
-    // State 2 & 3: Strava connected - show activities (with Spotify banner if not connected)
     return (
         <Container>
-            {!spotifyConnected && (
-                <SpotifyBanner
-                    spotifyAuthUrl={spotifyAuthUrl.toString()}
-                    minimized={bannerMinimized}
-                    onToggleMinimized={setBannerMinimized}
-                />
-            )}
-            <ActivitiesTable activities={activities} />
+            <ConnectionFlow
+                stravaConnected={stravaConnected}
+                spotifyConnected={spotifyConnected}
+                stravaAuthUrl={stravaAuthUrl.toString()}
+                spotifyAuthUrl={spotifyAuthUrl.toString()}
+            />
+            {activities.length > 0 && <ActivitiesTable activities={activities} />}
         </Container>
     );
 }
