@@ -136,7 +136,7 @@ export const themeOptions = {
                 root: {
                     '& .MuiTableCell-head': {
                         backgroundColor: '#8B5CF6',
-                        color: '#ffffff',
+                        color: '#000000',
                         fontWeight: 600,
                     },
                 },

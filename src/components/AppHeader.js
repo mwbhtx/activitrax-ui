@@ -7,6 +7,7 @@ import { Link as MuiLink } from "@mui/material";
 import { useState } from "react";
 import GridViewIcon from '@mui/icons-material/GridView';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function AppHeader(props) {
     const { isAuthenticated } = useAuth0();
@@ -83,6 +84,11 @@ export default function AppHeader(props) {
                 <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/settings" onClick={toggleDrawer(false)}>
                     <SettingsApplicationsIcon sx={{ m: 1 }} />
                     <Typography>Settings</Typography>
+                </Button>
+                {/* Navigation Link To About */}
+                <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/about" onClick={toggleDrawer(false)}>
+                    <InfoOutlinedIcon sx={{ m: 1 }} />
+                    <Typography>About</Typography>
                 </Button>
             </Stack>
             {/* Logout Button */}
@@ -220,6 +226,25 @@ export default function AppHeader(props) {
                                     }}
                                 >
                                     Settings
+                                </Button>
+                            </MuiLink>
+
+                            <MuiLink component={RouterLink} to="/about" underline="none">
+                                <Button
+                                    variant="text"
+                                    startIcon={<InfoOutlinedIcon />}
+                                    sx={{
+                                        color: 'text.highlight',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        '&:hover': {
+                                            backgroundColor: 'action.focus',
+                                            color: 'primary.light',
+                                        },
+                                    }}
+                                >
+                                    About
                                 </Button>
                             </MuiLink>
 

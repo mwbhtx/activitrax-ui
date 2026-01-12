@@ -9,6 +9,7 @@ import Settings from './routes/settings';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { StravaAuthPage } from './routes/strava_auth';
 import { SpotifyAuthPage } from './routes/spotify_auth';
+import About from './routes/about';
 import { AudioProvider } from './contexts/AudioContext';
 import MiniPlayer from './components/MiniPlayer';
 
@@ -28,6 +29,7 @@ export default function App() {
     <AudioProvider>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
         <Route path="dashboard" element={<ProtectedRoute component={Dashboard} />} />
         <Route path="settings" element={<ProtectedRoute component={Settings} />} />
         <Route path="callback" element={<CallbackPage />} />

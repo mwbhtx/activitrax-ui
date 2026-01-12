@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Link, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Navigate } from "react-router";
+import { Navigate, Link as RouterLink } from "react-router-dom";
 import AppHeader from "../components/AppHeader";
 import LoginButton from "../components/LoginButton";
 import SignupButton from "../components/SignupButton";
@@ -48,6 +48,16 @@ const HomeComponent = () => {
                 top: 0,
                 left: 0,
                 overflow: 'auto',
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(255, 255, 255, 0.0)',
+                    pointerEvents: 'none',
+                },
             }}
         >
             <Grid2 xs={12} display="flex" justifyContent="center" alignItems="center">
@@ -147,6 +157,22 @@ const MobileHome = () => {
                     <SignupButton />
                     <LoginButton />
                 </Stack>
+
+                {/* Learn more link */}
+                <Link
+                    component={RouterLink}
+                    to="/about"
+                    sx={{
+                        mt: 4,
+                        color: 'primary.light',
+                        textDecoration: 'none',
+                        '&:hover': {
+                            textDecoration: 'underline',
+                        },
+                    }}
+                >
+                    Learn how it works
+                </Link>
             </Box>
 
             {/* Bottom ambient glow */}
@@ -220,6 +246,21 @@ function AuthDialog() {
                     <SignupButton />
                     <LoginButton />
                 </Stack>
+                <Link
+                    component={RouterLink}
+                    to="/about"
+                    sx={{
+                        color: '#000',
+                        textDecoration: 'none',
+                        textAlign: 'center',
+                        fontWeight: 500,
+                        '&:hover': {
+                            textDecoration: 'underline',
+                        },
+                    }}
+                >
+                    Learn how it works
+                </Link>
             </Stack>
         </Box>
     );
