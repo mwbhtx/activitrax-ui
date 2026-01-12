@@ -41,6 +41,7 @@ const SpotifyBanner = ({ spotifyAuthUrl, minimized, onToggleMinimized }) => {
                     borderRadius: 2,
                     px: 2,
                     py: 1,
+                    mt: 3,
                     mb: 3,
                     cursor: 'pointer',
                     transition: 'background-color 0.2s ease',
@@ -96,6 +97,7 @@ const SpotifyBanner = ({ spotifyAuthUrl, minimized, onToggleMinimized }) => {
                 borderColor: 'custom.border',
                 borderRadius: 2,
                 p: 2.5,
+                mt: 3,
                 mb: 3,
             }}
         >

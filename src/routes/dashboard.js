@@ -17,7 +17,8 @@ import { strava_scopes } from "../services/strava";
 import { getUserConfig, getUserActivities, getActivityTracklist, updateUserConfig } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
-import { StravaConnectHero, TracklistPreferenceHero, SpotifyConnectHero } from "../components/OnboardingHero";
+import { StravaConnectHero, TracklistPreferenceHero } from "../components/OnboardingHero";
+import SpotifyBanner, { getInitialMinimizedState } from "../components/SpotifyBanner";
 
 // Activity processing status constants (must match backend)
 const ACTIVITY_STATUS = {
@@ -112,6 +113,7 @@ const ServiceConnectDialogue = () => {
     const [activities, setActivities] = useState([]);
     const [onboardingStep, setOnboardingStep] = useState(ONBOARDING_STEP.CONNECT_STRAVA);
     const [tracklistEnabled, setTracklistEnabled] = useState(true);
+    const [bannerMinimized, setBannerMinimized] = useState(getInitialMinimizedState);
 
     // Check if user just connected Strava (coming from OAuth redirect)
     const justConnectedStrava = searchParams.get('strava_connected') === 'true';
@@ -223,19 +225,16 @@ const ServiceConnectDialogue = () => {
         );
     }
 
-    // State 2: Strava connected but no Spotify - show Spotify connect hero
-    if (!spotifyConnected) {
-        return (
-            <SpotifyConnectHero
-                spotifyAuthUrl={spotifyAuthUrl.toString()}
-                onSkip={() => setOnboardingStep(ONBOARDING_STEP.COMPLETE)}
-            />
-        );
-    }
-
-    // State 3: Both connected - show activities
+    // State 2 & 3: Strava connected - show activities (with Spotify banner if not connected)
     return (
         <Container>
+            {!spotifyConnected && (
+                <SpotifyBanner
+                    spotifyAuthUrl={spotifyAuthUrl.toString()}
+                    minimized={bannerMinimized}
+                    onToggleMinimized={setBannerMinimized}
+                />
+            )}
             <ActivitiesTable activities={activities} />
         </Container>
     );
