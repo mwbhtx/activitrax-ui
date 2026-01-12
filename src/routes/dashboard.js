@@ -13,7 +13,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 import { strava_scopes } from "../services/strava";
-import { getUserConfig, getUserActivities, getActivityTracklist } from "../services/auth0";
+import { getUserConfig, getUserActivities, getActivityTracklist, validateConnections } from "../services/auth0";
 import { spotify_scopes } from "../services/spotify";
 import { useAudio } from "../contexts/AudioContext";
 import ConnectionFlow from "../components/OnboardingHero";
@@ -149,6 +149,17 @@ const ServiceConnectDialogue = () => {
 
                 // finally
                 setDataLoaded(true);
+
+                // Background validation - runs after page renders without blocking
+                if (userConfig.strava || userConfig.spotify) {
+                    validateConnections(accessToken)
+                        .then(result => {
+                            if (result.disconnected_services?.length > 0) {
+                                setDisconnectedServices(result.disconnected_services);
+                            }
+                        })
+                        .catch(err => console.log('Background validation failed:', err));
+                }
 
             } catch (e) {
                 console.log(e.message);

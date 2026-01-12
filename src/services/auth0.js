@@ -69,3 +69,16 @@ export const getActivityTracklist = async (api_token, activity_id) => {
     const response = await axios(reqConfig);
     return response.data
 }
+
+export const validateConnections = async (api_token) => {
+    const reqConfig = {
+        method: "POST",
+        url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/user/validate-connections",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + api_token
+        }
+    }
+    const response = await axios(reqConfig);
+    return response.data
+}
