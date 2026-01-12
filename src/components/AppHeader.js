@@ -24,9 +24,9 @@ export default function AppHeader(props) {
             [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
-            color: '#ffffff',
+            color: 'text.primary',
             '&:hover': {
-                backgroundColor: 'rgba(139, 92, 246, 0.08)',
+                backgroundColor: 'action.hover',
             },
         },
         drawerNavLinkButtons: {
@@ -34,11 +34,11 @@ export default function AppHeader(props) {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            color: 'rgba(255, 255, 255, 0.9)',
+            color: 'text.highlight',
             padding: '12px 16px',
             '&:hover': {
-                backgroundColor: 'rgba(139, 92, 246, 0.12)',
-                color: '#A78BFA',
+                backgroundColor: 'action.focus',
+                color: 'primary.light',
             },
             borderRadius: '0px',
             transition: 'all 0.2s ease',
@@ -49,17 +49,18 @@ export default function AppHeader(props) {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: '#1A1425',
-            borderRight: '1px solid rgba(139, 92, 246, 0.15)',
+            backgroundColor: 'background.paper',
+            borderRight: '1px solid',
+            borderRightColor: 'divider',
         },
         logoutButton: {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
             "&.MuiButton-contained": {
-                backgroundColor: '#8B5CF6',
+                backgroundColor: 'primary.main',
                 "&:hover": {
-                    backgroundColor: '#7C3AED',
+                    backgroundColor: 'primary.dark',
                 },
                 textAlign: "left",
                 borderRadius: "0px",
@@ -116,10 +117,11 @@ export default function AppHeader(props) {
                 position="sticky"
                 elevation={0}
                 sx={{
-                    backgroundColor: 'rgba(26, 20, 37, 0.8)',
+                    backgroundColor: 'custom.appBarBg',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
-                    borderBottom: '1px solid rgba(139, 92, 246, 0.15)',
+                    borderBottom: '1px solid',
+                    borderBottomColor: 'divider',
                     '&::after': {
                         content: '""',
                         position: 'absolute',
@@ -127,7 +129,7 @@ export default function AppHeader(props) {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent)',
+                        background: (theme) => `linear-gradient(90deg, transparent, ${theme.palette.custom.primaryGlow}, transparent)`,
                     },
                 }}
             >
@@ -160,13 +162,13 @@ export default function AppHeader(props) {
                                         variant="h6"
                                         sx={{
                                             fontWeight: 700,
-                                            background: 'linear-gradient(135deg, #ffffff 0%, #C4B5FD 100%)',
+                                            background: (theme) => `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.secondary.main} 100%)`,
                                             WebkitBackgroundClip: 'text',
                                             WebkitTextFillColor: 'transparent',
                                             backgroundClip: 'text',
                                             transition: 'all 0.3s ease',
                                             '&:hover': {
-                                                background: 'linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 100%)',
+                                                background: (theme) => `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.primary.main} 100%)`,
                                                 WebkitBackgroundClip: 'text',
                                                 WebkitTextFillColor: 'transparent',
                                                 backgroundClip: 'text',
@@ -187,13 +189,13 @@ export default function AppHeader(props) {
                                     variant="text"
                                     startIcon={<GridViewIcon />}
                                     sx={{
-                                        color: 'rgba(255, 255, 255, 0.8)',
+                                        color: 'text.highlight',
                                         px: 2,
                                         py: 1,
                                         borderRadius: 2,
                                         '&:hover': {
-                                            backgroundColor: 'rgba(139, 92, 246, 0.12)',
-                                            color: '#A78BFA',
+                                            backgroundColor: 'action.focus',
+                                            color: 'primary.light',
                                         },
                                     }}
                                 >
@@ -206,13 +208,13 @@ export default function AppHeader(props) {
                                     variant="text"
                                     startIcon={<SettingsApplicationsIcon />}
                                     sx={{
-                                        color: 'rgba(255, 255, 255, 0.8)',
+                                        color: 'text.highlight',
                                         px: 2,
                                         py: 1,
                                         borderRadius: 2,
                                         '&:hover': {
-                                            backgroundColor: 'rgba(139, 92, 246, 0.12)',
-                                            color: '#A78BFA',
+                                            backgroundColor: 'action.focus',
+                                            color: 'primary.light',
                                         },
                                     }}
                                 >
@@ -220,7 +222,7 @@ export default function AppHeader(props) {
                                 </Button>
                             </MuiLink>
 
-                            <Box sx={{ width: '1px', height: 24, backgroundColor: 'rgba(255, 255, 255, 0.2)', mx: 1 }} />
+                            <Box sx={{ width: '1px', height: 24, backgroundColor: 'custom.glassBg', mx: 1 }} />
 
                             <LogoutButton />
                         </Stack>

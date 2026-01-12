@@ -29,7 +29,7 @@ const ACTIVITY_STATUS = {
     STRAVA_UPDATE_ERROR: 'strava_update_error'
 };
 
-// Status display configuration with dark theme colors
+// Status display configuration using theme colors
 const getStatusConfig = (status) => {
     switch (status) {
         case ACTIVITY_STATUS.SUCCESS:
@@ -37,49 +37,49 @@ const getStatusConfig = (status) => {
                 label: 'Added',
                 icon: <CheckCircleIcon fontSize="small" />,
                 tooltip: 'Tracklist added to your Strava activity',
-                sx: { borderColor: '#22C55E', color: '#22C55E' }
+                sx: { borderColor: 'success.main', color: 'success.main' }
             };
         case ACTIVITY_STATUS.PROCESSING:
             return {
                 label: 'Processing',
                 icon: <HourglassEmptyIcon fontSize="small" />,
                 tooltip: 'Fetching your tracks from Spotify',
-                sx: { borderColor: 'rgba(255, 255, 255, 0.5)', color: 'rgba(255, 255, 255, 0.5)' }
+                sx: { borderColor: 'text.disabled', color: 'text.disabled' }
             };
         case ACTIVITY_STATUS.NO_SPOTIFY:
             return {
                 label: 'Not Connected',
                 icon: <WarningIcon fontSize="small" />,
                 tooltip: 'Spotify was not connected when this activity was recorded',
-                sx: { borderColor: '#f5a623', color: '#f5a623' }
+                sx: { borderColor: 'warning.light', color: 'warning.light' }
             };
         case ACTIVITY_STATUS.SPOTIFY_ERROR:
             return {
                 label: 'Spotify Error',
                 icon: <ErrorIcon fontSize="small" />,
                 tooltip: 'Failed to fetch tracks from Spotify',
-                sx: { borderColor: '#ff5252', color: '#ff5252' }
+                sx: { borderColor: 'error.light', color: 'error.light' }
             };
         case ACTIVITY_STATUS.NO_TRACKS:
             return {
                 label: 'No Music',
                 icon: <WarningIcon fontSize="small" />,
                 tooltip: 'No Spotify tracks were playing during this activity',
-                sx: { borderColor: 'rgba(255, 255, 255, 0.4)', color: 'rgba(255, 255, 255, 0.4)' }
+                sx: { borderColor: 'text.muted', color: 'text.muted' }
             };
         case ACTIVITY_STATUS.STRAVA_UPDATE_ERROR:
             return {
                 label: 'Strava Error',
                 icon: <ErrorIcon fontSize="small" />,
                 tooltip: 'Tracks were saved but failed to update Strava description',
-                sx: { borderColor: '#ff5252', color: '#ff5252' }
+                sx: { borderColor: 'error.light', color: 'error.light' }
             };
         default:
             return {
                 label: 'Pending',
                 icon: null,
                 tooltip: 'Waiting to process',
-                sx: { borderColor: 'rgba(255, 255, 255, 0.4)', color: 'rgba(255, 255, 255, 0.4)' }
+                sx: { borderColor: 'text.muted', color: 'text.muted' }
             };
     }
 };
@@ -193,7 +193,8 @@ const StravaConnect = () => {
                 flexDirection: 'column',
                 m: 2,
                 p: 4,
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                border: '1px solid',
+                borderColor: 'custom.border',
                 borderRadius: 3,
                 maxWidth: 400,
                 mx: 'auto',
@@ -203,7 +204,7 @@ const StravaConnect = () => {
                 <Box sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    backgroundColor: 'custom.primarySubtle',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -211,7 +212,7 @@ const StravaConnect = () => {
                     <img width={40} height={40} alt="Strava Logo" src={StravaLogo} />
                 </Box>
             </Box>
-            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)' }}>
+            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'text.highlight' }}>
                 Connect your Strava account to synchronize activities with your Spotify music.
             </Typography>
             <Button href={`${stravaAuthUrl}`} variant="contained" sx={{ width: '100%' }}>
@@ -241,7 +242,8 @@ const SpotifyConnect = () => {
                 flexDirection: 'column',
                 m: 2,
                 p: 4,
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                border: '1px solid',
+                borderColor: 'custom.border',
                 borderRadius: 3,
                 maxWidth: 400,
                 mx: 'auto',
@@ -251,7 +253,7 @@ const SpotifyConnect = () => {
                 <Box sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    backgroundColor: 'custom.primarySubtle',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -259,10 +261,10 @@ const SpotifyConnect = () => {
                     <img width={40} height={40} alt="Spotify Logo" src={SpotifyLogo} />
                 </Box>
             </Box>
-            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'rgba(255, 255, 255, 0.8)' }}>
+            <Typography variant="body1" sx={{ mb: 3, fontWeight: 400, textAlign: 'center', color: 'text.highlight' }}>
                 Connect your Spotify account to synchronize activities with your listening history.
             </Typography>
-            <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', backgroundColor: '#A78BFA', color: '#000', '&:hover': { backgroundColor: '#7C3AED' } }}>
+            <Button href={`${spotifyAuthUrl}`} variant="contained" sx={{ width: '100%', backgroundColor: 'primary.light', color: 'secondary.contrastText', '&:hover': { backgroundColor: 'primary.dark' } }}>
                 Connect Spotify
             </Button>
         </Paper>
@@ -278,13 +280,13 @@ const ActivityStatus = ({ status }) => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
                 {isSuccess ? (
                     <>
-                        <CheckCircleIcon sx={{ color: '#22C55E', fontSize: 18 }} />
-                        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>Processed</Typography>
+                        <CheckCircleIcon sx={{ color: 'success.main', fontSize: 18 }} />
+                        <Typography variant="body2" sx={{ color: 'text.highlight' }}>Processed</Typography>
                     </>
                 ) : (
                     <>
-                        <ErrorIcon sx={{ color: '#ff5252', fontSize: 18 }} />
-                        <Typography variant="body2" sx={{ color: '#ff5252' }}>{config.label}</Typography>
+                        <ErrorIcon sx={{ color: 'error.light', fontSize: 18 }} />
+                        <Typography variant="body2" sx={{ color: 'error.light' }}>{config.label}</Typography>
                     </>
                 )}
             </Box>
@@ -353,7 +355,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                     thickness={3}
                     sx={{
                         position: 'absolute',
-                        color: isPlaying ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)',
+                        color: isPlaying ? 'custom.progressBg' : 'custom.progressBgDim',
                     }}
                 />
                 {/* Progress circle */}
@@ -365,7 +367,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                         thickness={3}
                         sx={{
                             position: 'absolute',
-                            color: '#A78BFA',
+                            color: 'primary.light',
                             transition: 'none',
                         }}
                     />
@@ -376,7 +378,7 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                         width: 28,
                         height: 28,
                         borderRadius: '50%',
-                        backgroundColor: '#A78BFA',
+                        backgroundColor: 'primary.light',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -387,9 +389,9 @@ const PlayButton = ({ isPlaying, onPlayToggle, hasPreview }) => {
                     }}
                 >
                     {isPlaying ? (
-                        <PauseIcon sx={{ color: '#fff', fontSize: 18 }} />
+                        <PauseIcon sx={{ color: 'text.primary', fontSize: 18 }} />
                     ) : (
-                        <PlayArrowIcon sx={{ color: '#fff', fontSize: 18, ml: '2px' }} />
+                        <PlayArrowIcon sx={{ color: 'text.primary', fontSize: 18, ml: '2px' }} />
                     )}
                 </Box>
             </Box>
@@ -414,10 +416,10 @@ const TrackItem = ({ track, isPlaying, onPlayToggle }) => {
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
                             sx={{
-                                color: 'rgba(139, 92, 246, 0.7)',
+                                color: 'custom.primaryGlow',
                                 '&:hover': {
-                                    color: '#A78BFA',
-                                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                                    color: 'primary.light',
+                                    backgroundColor: 'custom.primarySubtle',
                                 },
                             }}
                         >
@@ -475,7 +477,7 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                 sx={{
                     '& > *': { borderBottom: isExpanded ? 'none' : undefined },
                     cursor: hasTracklist ? 'pointer' : 'default',
-                    '&:hover': hasTracklist ? { backgroundColor: 'rgba(139, 92, 246, 0.04)' } : {}
+                    '&:hover': hasTracklist ? { backgroundColor: 'action.disabledBackground' } : {}
                 }}
                 onClick={() => hasTracklist && onExpandClick()}
             >
@@ -506,10 +508,10 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
                                 </Typography>
                                 {isLoading || tracklist.length === 0 ? (
                                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 60 }}>
-                                        <CircularProgress size={24} sx={{ color: '#8B5CF6' }} />
+                                        <CircularProgress size={24} sx={{ color: 'primary.main' }} />
                                     </Box>
                                 ) : (
-                                    <List dense sx={{ bgcolor: 'rgba(139, 92, 246, 0.04)', borderRadius: 2, border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                                    <List dense sx={{ bgcolor: 'action.disabledBackground', borderRadius: 2, border: '1px solid', borderColor: 'custom.border' }}>
                                         {tracklist.map((track, index) => (
                                             <TrackItem
                                                 key={index}

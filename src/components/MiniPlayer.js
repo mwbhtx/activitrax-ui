@@ -30,17 +30,20 @@ const MiniPlayer = () => {
                     borderRadius: '16px 16px 0 0',
                     overflow: 'hidden',
                     backdropFilter: 'blur(20px)',
-                    backgroundColor: 'rgba(26, 20, 37, 0.95)',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: 'custom.miniPlayerBg',
+                    borderTop: '1px solid',
+                    borderTopColor: 'custom.borderLight',
+                    borderLeft: '1px solid',
+                    borderLeftColor: 'custom.border',
+                    borderRight: '1px solid',
+                    borderRightColor: 'custom.border',
                 }}
             >
                 {/* Progress bar */}
                 <Box
                     sx={{
                         height: 3,
-                        backgroundColor: 'rgba(139, 92, 246, 0.15)',
+                        backgroundColor: 'divider',
                         position: 'relative',
                     }}
                 >
@@ -48,9 +51,9 @@ const MiniPlayer = () => {
                         sx={{
                             height: '100%',
                             width: `${progress}%`,
-                            backgroundColor: '#A78BFA',
+                            backgroundColor: 'primary.light',
                             transition: 'width 0.1s linear',
-                            boxShadow: '0 0 8px rgba(139, 92, 246, 0.5)',
+                            boxShadow: (theme) => `0 0 8px ${theme.palette.custom.primaryGlow}`,
                         }}
                     />
                 </Box>
@@ -71,7 +74,7 @@ const MiniPlayer = () => {
                         sx={{
                             width: 48,
                             height: 48,
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                            boxShadow: (theme) => `0 4px 12px ${theme.palette.custom.overlay}`,
                         }}
                     >
                         {!currentTrack?.album_image && <MusicNoteIcon />}
@@ -79,10 +82,10 @@ const MiniPlayer = () => {
 
                     {/* Track info */}
                     <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography variant="body2" noWrap sx={{ fontWeight: 600, color: '#ffffff' }}>
+                        <Typography variant="body2" noWrap sx={{ fontWeight: 600, color: 'text.primary' }}>
                             {currentTrack?.name}
                         </Typography>
-                        <Typography variant="caption" noWrap sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                        <Typography variant="caption" noWrap sx={{ color: 'text.secondary' }}>
                             {currentTrack?.artist}
                         </Typography>
                     </Box>
@@ -93,11 +96,11 @@ const MiniPlayer = () => {
                         <IconButton
                             onClick={togglePlayPause}
                             sx={{
-                                backgroundColor: '#8B5CF6',
-                                color: '#fff',
+                                backgroundColor: 'primary.main',
+                                color: 'primary.contrastText',
                                 transition: 'all 0.2s ease',
                                 '&:hover': {
-                                    backgroundColor: '#7C3AED',
+                                    backgroundColor: 'primary.dark',
                                     transform: 'scale(1.05)',
                                 },
                             }}
@@ -110,10 +113,10 @@ const MiniPlayer = () => {
                             onClick={stop}
                             size="small"
                             sx={{
-                                color: 'rgba(255, 255, 255, 0.6)',
+                                color: 'text.secondary',
                                 '&:hover': {
-                                    color: '#ffffff',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    color: 'text.primary',
+                                    backgroundColor: 'custom.border',
                                 },
                             }}
                         >

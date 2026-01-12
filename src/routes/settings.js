@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, CircularProgress, Container, FormControlLabel, IconButton, Menu, MenuItem, Stack, Switch, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, FormControlLabel, IconButton, Menu, MenuItem, Stack, Switch, Typography } from "@mui/material";
 import AppHeader from "../components/AppHeader";
 import StravaLogo from "../images/strava-2.svg";
 import SpotifyLogo from "../images/spotify-2.svg";
@@ -6,8 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useEffect, useState } from "react";
 import { disconnectService, getUserConfig, updateUserConfig } from "../services/auth0";
 import { useAuth0 } from "@auth0/auth0-react";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 export default function Settings(props) {
 
@@ -36,7 +35,6 @@ const SettingsContent = () => {
 
 
     const [accessToken, setAccessToken] = useState('');
-    const [tokenVisible, setTokenVisible] = useState(false);
     const [stravaDescriptionEnabled, setStravaDescriptionEnabled] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -200,31 +198,14 @@ const SettingsContent = () => {
                     <Stack spacing={2} sx={{ p: 2 }} alignItems="center">
                         <Card sx={{ width: '100%' }}>
                             <CardContent>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-                                    API Access Token
-                                </Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <input
-                                        type={tokenVisible ? 'text' : 'password'}
-                                        readOnly
-                                        value={accessToken}
-                                        style={{
-                                            flexGrow: 1,
-                                            border: '1px solid rgba(255, 255, 255, 0.12)',
-                                            borderRadius: 8,
-                                            padding: '10px 12px',
-                                            fontSize: '0.9rem',
-                                            fontFamily: 'monospace',
-                                            overflowX: 'auto',
-                                            whiteSpace: 'nowrap',
-                                            backgroundColor: '#2a2a2a',
-                                            color: '#ffffff',
-                                        }}
-                                    />
-                                    <IconButton onClick={() => setTokenVisible(!tokenVisible)} sx={{ ml: 1 }}>
-                                        {tokenVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                                    </IconButton>
-                                </Box>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<ContentCopyIcon />}
+                                    onClick={() => navigator.clipboard.writeText(accessToken)}
+                                    sx={{ width: 'fit-content' }}
+                                >
+                                    Copy Access Token
+                                </Button>
                             </CardContent>
                         </Card>
                     </Stack>

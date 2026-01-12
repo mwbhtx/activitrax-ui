@@ -21,13 +21,13 @@ const LoginButton = () => {
                 fontSize: '1rem',
                 fontWeight: 600,
                 borderWidth: 2,
-                borderColor: 'rgba(0, 0, 0, 0.3)',
-                color: '#000',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                borderColor: 'custom.overlay',
+                color: 'secondary.contrastText',
+                backgroundColor: 'custom.borderLight',
                 '&:hover': {
                     borderWidth: 2,
-                    borderColor: 'rgba(0, 0, 0, 0.5)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderColor: 'custom.overlayDark',
+                    backgroundColor: 'custom.glassBg',
                     transform: 'translateY(-1px)',
                 },
                 '&:active': {

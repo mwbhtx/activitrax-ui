@@ -22,9 +22,9 @@ const SignupButton = () => {
                 py: 1.5,
                 fontSize: '1rem',
                 fontWeight: 600,
-                boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
+                boxShadow: (theme) => `0 4px 14px ${theme.palette.custom.primaryGlow}`,
                 '&:hover': {
-                    boxShadow: '0 6px 20px rgba(139, 92, 246, 0.5)',
+                    boxShadow: (theme) => `0 6px 20px ${theme.palette.custom.primaryGlow}`,
                     transform: 'translateY(-1px)',
                 },
                 '&:active': {
