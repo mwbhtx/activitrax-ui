@@ -3,7 +3,7 @@ import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import AppHeader from "../components/AppHeader";
-import { exchangeSpotifyAuthToken } from "../services/spotify";
+import { exchangeSpotifyAuthToken, spotify_scopes } from "../services/spotify";
 
 export const SpotifyAuthPage = () => {
 
@@ -21,6 +21,7 @@ export const SpotifyAuthPage = () => {
 
         const exchangeAuthToken = async (auth_code) => {
 
+            let success = false;
             try {
 
                 if (error) {
@@ -35,13 +36,18 @@ export const SpotifyAuthPage = () => {
 
                 // exchange auth code for access token and register spotify account with user
                 const api_token = await getAccessTokenSilently();
-                await exchangeSpotifyAuthToken(api_token, auth_code);
+                await exchangeSpotifyAuthToken(api_token, auth_code, spotify_scopes);
+                success = true;
             }
             catch (e) {
                 console.log(e)
             }
 
-            navigate('/dashboard');
+            if (success) {
+                navigate('/dashboard?spotify_connected=true');
+            } else {
+                navigate('/dashboard');
+            }
         }
 
         exchangeAuthToken(auth_code);

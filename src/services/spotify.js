@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const exchangeSpotifyAuthToken = async (api_token, auth_token) => {
-    
+export const exchangeSpotifyAuthToken = async (api_token, auth_token, scopes) => {
+
     // Exchange spotify auth token for access token
     const reqConfig = {
         method: "POST",
@@ -12,6 +12,7 @@ export const exchangeSpotifyAuthToken = async (api_token, auth_token) => {
         url: process.env.REACT_APP_ACTIVITRAX_API_URL + "/spotify/exchange_token",
         data: {
             auth_token: auth_token,
+            scopes: scopes
         }
     }
 
