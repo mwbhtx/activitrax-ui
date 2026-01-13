@@ -201,7 +201,7 @@ const ServiceConnectDialogue = () => {
                 stravaAuthUrl={stravaAuthUrl.toString()}
                 spotifyAuthUrl={spotifyAuthUrl.toString()}
             />
-            {activities.length > 0 && <ActivitiesTable activities={activities} isLiked={isLiked} onLikeChange={handleLikeChange} />}
+            <ActivitiesTable activities={activities} isLiked={isLiked} onLikeChange={handleLikeChange} />
         </Container>
     );
 }
