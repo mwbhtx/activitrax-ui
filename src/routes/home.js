@@ -135,7 +135,7 @@ const MobileHome = () => {
                         letterSpacing: '-0.02em',
                     }}
                 >
-                    Your Music. Your Workouts.
+                    Your Music.<br />Your Workouts.
                 </Typography>
 
                 {/* Tagline */}
