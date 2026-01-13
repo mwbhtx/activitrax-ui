@@ -201,7 +201,13 @@ const ServiceConnectDialogue = () => {
                 stravaAuthUrl={stravaAuthUrl.toString()}
                 spotifyAuthUrl={spotifyAuthUrl.toString()}
             />
-            <ActivitiesTable activities={activities} isLiked={isLiked} onLikeChange={handleLikeChange} />
+            <ActivitiesTable
+                activities={activities}
+                isLiked={isLiked}
+                onLikeChange={handleLikeChange}
+                stravaConnected={stravaConnected}
+                spotifyConnected={spotifyConnected}
+            />
         </Container>
     );
 }
@@ -487,7 +493,9 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
     );
 };
 
-const EmptyActivitiesState = () => {
+const EmptyActivitiesState = ({ stravaConnected, spotifyConnected }) => {
+    const bothConnected = stravaConnected && spotifyConnected;
+
     return (
         <Box sx={{
             textAlign: 'center',
@@ -539,18 +547,20 @@ const EmptyActivitiesState = () => {
                 </Typography>
             </Box>
 
-            {/* Status indicator */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-                <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
-                <Typography variant="caption" sx={{ color: 'success.main' }}>
-                    Connected and ready • Activities sync within minutes
-                </Typography>
-            </Box>
+            {/* Status indicator - only show when both services are connected */}
+            {bothConnected && (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                    <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
+                    <Typography variant="caption" sx={{ color: 'success.main' }}>
+                        Connected and ready • Activities sync within minutes
+                    </Typography>
+                </Box>
+            )}
         </Box>
     );
 };
 
-const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
+const ActivitiesTable = ({ activities, isLiked, onLikeChange, stravaConnected, spotifyConnected }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [expandedId, setExpandedId] = useState(null);
     const [tracklists, setTracklists] = useState({});
@@ -630,7 +640,10 @@ const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={8} sx={{ p: 0, border: 'none' }}>
-                                    <EmptyActivitiesState />
+                                    <EmptyActivitiesState
+                                        stravaConnected={stravaConnected}
+                                        spotifyConnected={spotifyConnected}
+                                    />
                                 </TableCell>
                             </TableRow>
                         )}
