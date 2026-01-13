@@ -71,9 +71,12 @@ const MobileHome = () => {
     return (
         <Box
             sx={{
-                height: '100dvh',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
                 backgroundColor: '#0F0B1A',
-                position: 'relative',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
