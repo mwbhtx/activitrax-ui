@@ -39,7 +39,7 @@ const SettingsContent = () => {
 
 
     const [accessToken, setAccessToken] = useState('');
-    const [stravaDescriptionEnabled, setStravaDescriptionEnabled] = useState(true);
+    const [stravaDescriptionEnabled, setStravaDescriptionEnabled] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     // Build OAuth URLs
@@ -101,7 +101,7 @@ const SettingsContent = () => {
             const connectedServices = await getUserConfig(api_token);
             if (connectedServices.strava) setStravaConnected(true);
             if (connectedServices.spotify) setSpotifyConnected(true);
-            setStravaDescriptionEnabled(connectedServices.strava_description_enabled !== false);
+            setStravaDescriptionEnabled(connectedServices.strava_description_enabled);
 
             setAccessToken(api_token);
             setIsAdmin(connectedServices.is_admin === true);
