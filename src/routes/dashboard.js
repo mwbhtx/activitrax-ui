@@ -590,7 +590,15 @@ const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
 
     return (
         <>
-            <Typography variant="h6" sx={{ m: 3, fontWeight: 800 }}>Your Activities</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, m: 3 }}>
+                <DirectionsRunIcon sx={{ color: '#FC4C02', fontSize: 32 }} />
+                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                    Your Activities
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {sortedActivities.length} {sortedActivities.length === 1 ? 'activity' : 'activities'}
+                </Typography>
+            </Box>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="activities table">
                     <TableHead>
