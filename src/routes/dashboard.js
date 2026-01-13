@@ -514,7 +514,7 @@ const EmptyActivitiesState = () => {
 
             {/* Body copy */}
             <Typography variant="body1" color="text.secondary" sx={{ mb: 1, lineHeight: 1.6 }}>
-                Go for a run or ride with Spotify playing, and your tracklist will appear here automatically.
+                Record a Strava activity with Spotify playing, and your tracklist will appear here automatically.
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
                 You'll see what songs powered every mile, when they played, and be able to relive your workout soundtrack.
