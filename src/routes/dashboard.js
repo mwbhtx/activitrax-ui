@@ -496,6 +496,11 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
 const EmptyActivitiesState = ({ stravaConnected, spotifyConnected }) => {
     const bothConnected = stravaConnected && spotifyConnected;
 
+    // Don't show the empty state if services aren't connected - ConnectionFlow handles that
+    if (!bothConnected) {
+        return null;
+    }
+
     return (
         <Box sx={{
             textAlign: 'center',
@@ -547,15 +552,13 @@ const EmptyActivitiesState = ({ stravaConnected, spotifyConnected }) => {
                 </Typography>
             </Box>
 
-            {/* Status indicator - only show when both services are connected */}
-            {bothConnected && (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-                    <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
-                    <Typography variant="caption" sx={{ color: 'success.main' }}>
-                        Connected and ready • Activities sync within minutes
-                    </Typography>
-                </Box>
-            )}
+            {/* Status indicator */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
+                <Typography variant="caption" sx={{ color: 'success.main' }}>
+                    Connected and ready • Activities sync within minutes
+                </Typography>
+            </Box>
         </Box>
     );
 };
