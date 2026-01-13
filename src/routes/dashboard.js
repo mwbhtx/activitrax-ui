@@ -517,7 +517,7 @@ const EmptyActivitiesState = () => {
                 Record a Strava activity with Spotify playing, and your tracklist will appear here automatically.
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-                You'll see what songs powered every mile, when they played, and be able to relive your workout soundtrack.
+                You'll see what songs powered your workout, when they played, and be able to relive your soundtrack.
             </Typography>
 
             {/* Tip card */}
