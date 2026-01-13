@@ -20,6 +20,9 @@ import { useLikedTracks } from "../contexts/LikedTracksContext";
 import ConnectionFlow from "../components/OnboardingHero";
 import LikeButton from "../components/LikeButton";
 import { getSpotifyTrackId } from "../services/likedTracks";
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 
 // Activity processing status constants (must match backend)
 const ACTIVITY_STATUS = {
@@ -484,6 +487,69 @@ const ActivityRow = ({ activity, onExpandClick, isExpanded, tracklist, isLoading
     );
 };
 
+const EmptyActivitiesState = () => {
+    return (
+        <Box sx={{
+            textAlign: 'center',
+            py: 8,
+            maxWidth: 600,
+            mx: 'auto'
+        }}>
+            {/* Icon group */}
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 2,
+                mb: 3
+            }}>
+                <DirectionsRunIcon sx={{ fontSize: 56, color: 'primary.light' }} />
+                <MusicNoteIcon sx={{ fontSize: 56, color: 'primary.light' }} />
+            </Box>
+
+            {/* Headline */}
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                Ready to discover your workout soundtrack?
+            </Typography>
+
+            {/* Body copy */}
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 1, lineHeight: 1.6 }}>
+                Go for a run or ride with Spotify playing, and your tracklist will appear here automatically.
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
+                You'll see what songs powered every mile, when they played, and be able to relive your workout soundtrack.
+            </Typography>
+
+            {/* Tip card */}
+            <Box sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 1.5,
+                px: 2,
+                py: 1.5,
+                mb: 3,
+                border: '1px solid',
+                borderColor: 'custom.border',
+                borderRadius: 2,
+                backgroundColor: 'custom.primarySubtle'
+            }}>
+                <LightbulbOutlinedIcon sx={{ fontSize: 20, color: 'primary.light' }} />
+                <Typography variant="body2" color="text.secondary">
+                    Tip: Start Spotify before you begin your Strava activity for the best results
+                </Typography>
+            </Box>
+
+            {/* Status indicator */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
+                <Typography variant="caption" sx={{ color: 'success.main' }}>
+                    Connected and ready • Activities sync within minutes
+                </Typography>
+            </Box>
+        </Box>
+    );
+};
+
 const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
     const { getAccessTokenSilently } = useAuth0();
     const [expandedId, setExpandedId] = useState(null);
@@ -555,10 +621,8 @@ const ActivitiesTable = ({ activities, isLiked, onLikeChange }) => {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={8} align="center">
-                                    <Typography variant="body2" sx={{ py: 2 }}>
-                                        No activities yet. Complete a Strava activity while listening to Spotify to see it here!
-                                    </Typography>
+                                <TableCell colSpan={8} sx={{ p: 0, border: 'none' }}>
+                                    <EmptyActivitiesState />
                                 </TableCell>
                             </TableRow>
                         )}
