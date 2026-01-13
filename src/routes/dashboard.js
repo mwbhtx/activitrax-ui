@@ -574,6 +574,12 @@ const ActivitiesTable = ({ activities, isLiked, onLikeChange, stravaConnected, s
         new Date(b.start_date) - new Date(a.start_date)
     );
 
+    // If no activities and services aren't connected, don't show the table at all
+    const bothConnected = stravaConnected && spotifyConnected;
+    if (sortedActivities.length === 0 && !bothConnected) {
+        return null;
+    }
+
     const handleExpandClick = async (activityId) => {
         if (expandedId === activityId) {
             setExpandedId(null);
