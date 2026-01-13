@@ -1,20 +1,38 @@
-import { AppBar, Box, Button, Drawer, IconButton, Stack, Toolbar, Typography, useTheme } from "@mui/material"
+import { AppBar, Box, Button, Drawer, IconButton, Stack, Toolbar, Typography, useTheme, Badge } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import { Link as RouterLink } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GridViewIcon from '@mui/icons-material/GridView';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import { getUnreadCount } from "../services/feedback";
 
 export default function AppHeader(props) {
-    const { isAuthenticated } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const [unreadCount, setUnreadCount] = useState(0);
 
     // import useTheme hook so we can apply some breakpoints in our styles
     const theme = useTheme();
+
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            if (isAuthenticated) {
+                try {
+                    const api_token = await getAccessTokenSilently();
+                    const count = await getUnreadCount(api_token);
+                    setUnreadCount(count);
+                } catch (error) {
+                    console.error('Failed to fetch unread count:', error);
+                }
+            }
+        };
+        fetchUnreadCount();
+    }, [isAuthenticated, getAccessTokenSilently]);
 
     const styles = {
         largeNavButtons: {
@@ -95,6 +113,18 @@ export default function AppHeader(props) {
                 <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/about" onClick={toggleDrawer(false)}>
                     <InfoOutlinedIcon sx={{ m: 1 }} />
                     <Typography>About</Typography>
+                </Button>
+                {/* Navigation Link To Feedback/Support */}
+                <Button sx={styles.drawerNavLinkButtons} component={RouterLink} to="/feedback" onClick={toggleDrawer(false)}>
+                    <Badge
+                        variant="dot"
+                        color="error"
+                        invisible={unreadCount === 0}
+                        sx={{ m: 1 }}
+                    >
+                        <SupportAgentIcon />
+                    </Badge>
+                    <Typography>Support</Typography>
                 </Button>
             </Stack>
             {/* Logout Button */}
@@ -274,6 +304,33 @@ export default function AppHeader(props) {
                             </MuiLink>
 
                             <Box sx={{ width: '1px', height: 24, backgroundColor: 'custom.glassBg', mx: 1 }} />
+
+                            <MuiLink component={RouterLink} to="/feedback" underline="none">
+                                <Button
+                                    variant="text"
+                                    startIcon={
+                                        <Badge
+                                            variant="dot"
+                                            color="error"
+                                            invisible={unreadCount === 0}
+                                        >
+                                            <SupportAgentIcon />
+                                        </Badge>
+                                    }
+                                    sx={{
+                                        color: 'text.highlight',
+                                        px: 2,
+                                        py: 1,
+                                        borderRadius: 2,
+                                        '&:hover': {
+                                            backgroundColor: 'action.focus',
+                                            color: 'primary.light',
+                                        },
+                                    }}
+                                >
+                                    Support
+                                </Button>
+                            </MuiLink>
 
                             <LogoutButton />
                         </Stack>
