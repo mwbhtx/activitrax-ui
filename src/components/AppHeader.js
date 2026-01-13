@@ -47,7 +47,7 @@ export default function AppHeader(props) {
         },
         drawerContainer: {
             width: '220px',
-            minHeight: '100vh',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',

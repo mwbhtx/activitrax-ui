@@ -175,6 +175,7 @@ export const themeOptions = {
                 paper: {
                     backgroundColor: '#1A1425',
                     borderRight: '1px solid rgba(139, 92, 246, 0.15)',
+                    height: '100dvh',
                 },
             },
         },
