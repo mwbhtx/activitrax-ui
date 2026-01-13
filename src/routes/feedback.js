@@ -23,7 +23,6 @@ import {
     Paper,
     Pagination,
     IconButton,
-    Tooltip,
     Menu,
     ListItemIcon,
     ListItemText,
@@ -36,7 +35,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getUserConfig } from "../services/auth0";
 import { getTopics, deleteTopic, updateTopicStatus } from "../services/feedback";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import FeedbackCategoryChip from "../components/FeedbackCategoryChip";
 import FeedbackStatusChip from "../components/FeedbackStatusChip";
 import FeedbackTopicDialog from "../components/FeedbackTopicDialog";
@@ -186,18 +185,16 @@ export default function FeedbackPage() {
 
     if (loading) {
         return (
-            <>
-                <AppHeader />
+            <PageLayout>
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
                     <CircularProgress />
                 </Box>
-            </>
+            </PageLayout>
         );
     }
 
     return (
-        <>
-            <AppHeader />
+        <PageLayout>
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 {/* Header */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -378,6 +375,6 @@ export default function FeedbackPage() {
                     onSubmit={handleSubmitTopic}
                 />
             </Container>
-        </>
+        </PageLayout>
     );
 }

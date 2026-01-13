@@ -1,14 +1,13 @@
 import { Box, CircularProgress } from "@mui/material";
 import React from "react";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 
 export const CallbackPage = () => {
     return (
-        <div className="page-layout">
-            <AppHeader />
+        <PageLayout>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress color="secondary" sx={{ margin: 20 }} />
             </Box>
-        </div >
+        </PageLayout>
     );
 };

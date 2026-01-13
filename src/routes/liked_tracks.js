@@ -18,7 +18,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useEffect, useState } from "react";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import LikeButton from "../components/LikeButton";
 import { getLikedTracks } from "../services/likedTracks";
 import { useAudio } from "../contexts/AudioContext";
@@ -177,8 +177,7 @@ export default function LikedTracksPage() {
     };
 
     return (
-        <>
-            <AppHeader />
+        <PageLayout>
             <Container maxWidth="md" sx={{ py: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
                     <FavoriteIcon sx={{ color: 'error.main', fontSize: 32 }} />
@@ -304,6 +303,6 @@ export default function LikedTracksPage() {
                     </>
                 )}
             </Container>
-        </>
+        </PageLayout>
     );
 }

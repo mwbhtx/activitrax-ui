@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import { exchangeSpotifyAuthToken, spotify_scopes } from "../services/spotify";
 
 export const SpotifyAuthPage = () => {
@@ -55,11 +55,10 @@ export const SpotifyAuthPage = () => {
     }, [auth_code])
 
     return (
-        <div className="page-layout">
-            <AppHeader />
+        <PageLayout>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress color="secondary" sx={{ margin: 20 }} />
             </Box>
-        </div >
+        </PageLayout>
     );
 };

@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import { exchangeStravaAuthToken } from "../services/strava";
 import { strava_scopes } from "../services/strava";
 
@@ -67,11 +67,10 @@ export const StravaAuthPage = () => {
     }, [auth_code])
 
     return (
-        <div className="page-layout">
-            <AppHeader />
+        <PageLayout>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress color="secondary" sx={{ margin: 20 }} />
             </Box>
-        </div >
+        </PageLayout>
     );
 };

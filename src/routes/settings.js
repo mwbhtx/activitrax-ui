@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, FormControlLabel, IconButton, Menu, MenuItem, Stack, Switch, Typography } from "@mui/material";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import StravaLogo from "../images/strava-2.svg";
 import SpotifyLogo from "../images/spotify-2.svg";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -15,12 +15,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 export default function Settings(props) {
 
     return (
-        <>
-            <AppHeader />
+        <PageLayout>
             <Container sx={{ p: 3 }}>
                 <SettingsContent />
             </Container>
-        </>
+        </PageLayout>
     )
 }
 

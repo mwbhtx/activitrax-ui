@@ -12,14 +12,12 @@ import {
     Button,
     Breadcrumbs,
     Link,
-    Divider,
     IconButton,
     Chip,
     Menu,
     MenuItem,
     ListItemIcon,
-    ListItemText,
-    Badge
+    ListItemText
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -28,7 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getUserConfig } from "../services/auth0";
 import { getTopicDetail, createReply, updateTopicStatus, deleteTopic, deleteReply, markTopicAsRead } from "../services/feedback";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import FeedbackCategoryChip from "../components/FeedbackCategoryChip";
 import FeedbackStatusChip from "../components/FeedbackStatusChip";
 
@@ -186,29 +184,26 @@ export default function FeedbackDetailPage() {
 
     if (loading) {
         return (
-            <>
-                <AppHeader />
+            <PageLayout>
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
                     <CircularProgress />
                 </Box>
-            </>
+            </PageLayout>
         );
     }
 
     if (!topic) {
         return (
-            <>
-                <AppHeader />
+            <PageLayout>
                 <Container maxWidth="md" sx={{ py: 4 }}>
                     <Typography>Topic not found</Typography>
                 </Container>
-            </>
+            </PageLayout>
         );
     }
 
     return (
-        <>
-            <AppHeader />
+        <PageLayout>
             <Container maxWidth="md" sx={{ py: 4 }}>
                 {/* Breadcrumbs */}
                 <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -370,6 +365,6 @@ export default function FeedbackDetailPage() {
                     )}
                 </Menu>
             </Container>
-        </>
+        </PageLayout>
     );
 }

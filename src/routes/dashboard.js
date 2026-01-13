@@ -6,7 +6,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useEffect, useState } from "react";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -90,12 +90,14 @@ const getStatusConfig = (status) => {
 };
 
 export default function Dashboard(props) {
+    const { isVisible } = useAudio();
 
     return (
-        <>
-            <AppHeader />
-            <ServiceConnectDialogue />
-        </>
+        <PageLayout>
+            <Box sx={{ pb: isVisible ? '112px' : '24px' }}>
+                <ServiceConnectDialogue />
+            </Box>
+        </PageLayout>
     )
 }
 
@@ -569,8 +571,15 @@ const ActivitiesTable = ({ activities, isLiked, onLikeChange, stravaConnected, s
     const [tracklists, setTracklists] = useState({});
     const [loadingId, setLoadingId] = useState(null);
 
-    // Sort activities by start_date descending (newest first)
-    const sortedActivities = [...activities].sort((a, b) =>
+    // Deduplicate activities by id and sort by start_date descending (newest first)
+    const uniqueActivities = activities.reduce((acc, activity) => {
+        if (!acc.find(a => a.id === activity.id)) {
+            acc.push(activity);
+        }
+        return acc;
+    }, []);
+
+    const sortedActivities = [...uniqueActivities].sort((a, b) =>
         new Date(b.start_date) - new Date(a.start_date)
     );
 

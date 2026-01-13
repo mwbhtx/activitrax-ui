@@ -1,7 +1,7 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link as RouterLink } from "react-router-dom";
-import AppHeader from "../components/AppHeader";
+import PageLayout from "../components/PageLayout";
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import SyncIcon from '@mui/icons-material/Sync';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -12,14 +12,11 @@ export default function About() {
     const { isAuthenticated } = useAuth0();
 
     return (
-        <>
-            <AppHeader />
+        <PageLayout>
             <Box
                 sx={{
-                    minHeight: 'calc(100vh - 64px)',
                     backgroundColor: 'background.default',
                     position: 'relative',
-                    overflow: 'hidden',
                 }}
             >
                 {/* Ambient glow */}
@@ -251,6 +248,6 @@ export default function About() {
                     )}
                 </Container>
             </Box>
-        </>
+        </PageLayout>
     );
 }

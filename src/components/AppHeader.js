@@ -157,9 +157,10 @@ export default function AppHeader(props) {
                 {drawerList()}
             </Drawer>
             <AppBar
-                position="sticky"
+                position="static"
                 elevation={0}
                 sx={{
+                    flexShrink: 0,
                     backgroundColor: 'rgba(15, 11, 26, 0.9)',
                     backdropFilter: 'blur(24px)',
                     WebkitBackdropFilter: 'blur(24px)',
