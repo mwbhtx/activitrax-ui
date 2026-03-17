@@ -38,7 +38,8 @@ Activitrax connects your Strava workouts with your Spotify listening history. Wh
 - Responsive design with mobile-specific layouts
 - User feedback system with topic threading
 
-## Local Development
+<details>
+<summary><strong>Local Development</strong></summary>
 
 ```bash
 # Requires Node 22
@@ -61,6 +62,8 @@ See [`.env.example`](.env.example) for the full list. You'll need:
 - Strava and Spotify OAuth client IDs and redirect URIs
 - API URL pointing to the backend
 
-## Related
+### Related
 
 - [activitrax-api](https://github.com/mwbhtx/activitrax-api) — Backend API
+
+</details>
