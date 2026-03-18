@@ -167,11 +167,11 @@ const ServiceConnectDialogue = () => {
                                 setDisconnectedServices(result.disconnected_services);
                             }
                         })
-                        .catch(err => console.log('Background validation failed:', err));
+                        .catch(err => console.error('Background validation failed:', err));
                 }
 
             } catch (e) {
-                console.log(e.message);
+                console.error('Failed to load dashboard data:', e);
             }
         };
 

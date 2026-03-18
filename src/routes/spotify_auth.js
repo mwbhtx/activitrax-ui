@@ -40,7 +40,7 @@ export const SpotifyAuthPage = () => {
                 success = true;
             }
             catch (e) {
-                console.log(e)
+                console.error('Failed to exchange Spotify auth token:', e)
             }
 
             if (success) {

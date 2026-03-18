@@ -49,7 +49,7 @@ export const StravaAuthPage = () => {
 
             }
             catch (e) {
-                console.log(e)
+                console.error('Failed to exchange Strava auth token:', e)
             }
 
             // Only pass strava_connected param if exchange succeeded
